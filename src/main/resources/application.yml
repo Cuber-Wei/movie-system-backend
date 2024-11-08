@@ -1,6 +1,4 @@
 # 公共配置文件
-# @author <a href="https://github.com/liyupi">程序员鱼皮</a>
-# @from <a href="https://yupi.icu">编程导航知识星球</a>
 spring:
   application:
     name: oj
@@ -21,7 +19,7 @@ spring:
   # todo 需替换配置
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/my_db
+    url: jdbc:mysql://localhost:3306/oj_db
     username: root
     password: 123456
   # Redis 配置
@@ -66,10 +64,10 @@ wx:
   # 微信公众平台
   # todo 需替换配置
   mp:
-    token: xxx
-    aesKey: xxx
-    appId: xxx
-    secret: xxx
+    token: L0v3ch4n
+    aesKey:
+    appId:
+    secret:
     config-storage:
       http-client-type: HttpClient
       key-prefix: wx
@@ -100,7 +98,7 @@ knife4j:
       default:
         api-rule: package
         api-rule-resources:
-          - com.yupi.oj.controller
+          - com.l0v3ch4n.oj.controller
 # 代码沙箱配置
 codesandbox:
   type: example

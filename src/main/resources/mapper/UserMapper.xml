@@ -2,10 +2,10 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.yupi.oj.mapper.UserMapper">
+<mapper namespace="generator.mapper.UserMapper">
 
-    <resultMap id="BaseResultMap" type="com.yupi.oj.model.entity.User">
-            <id property="id" column="id" jdbcType="BIGINT"/>
+    <resultMap id="BaseResultMap" type="com.l0v3ch4n.oj.model.entity.User">
+            <id property="userId" column="userId" jdbcType="BIGINT"/>
             <result property="userAccount" column="userAccount" jdbcType="VARCHAR"/>
             <result property="userPassword" column="userPassword" jdbcType="VARCHAR"/>
             <result property="unionId" column="unionId" jdbcType="VARCHAR"/>
@@ -13,6 +13,8 @@
             <result property="userName" column="userName" jdbcType="VARCHAR"/>
             <result property="userAvatar" column="userAvatar" jdbcType="VARCHAR"/>
             <result property="userProfile" column="userProfile" jdbcType="VARCHAR"/>
+            <result property="userPhone" column="userPhone" jdbcType="VARCHAR"/>
+            <result property="userMail" column="userMail" jdbcType="VARCHAR"/>
             <result property="userRole" column="userRole" jdbcType="VARCHAR"/>
             <result property="createTime" column="createTime" jdbcType="TIMESTAMP"/>
             <result property="updateTime" column="updateTime" jdbcType="TIMESTAMP"/>
@@ -20,9 +22,10 @@
     </resultMap>
 
     <sql id="Base_Column_List">
-        id,userAccount,userPassword,
+        userId,userAccount,userPassword,
         unionId,mpOpenId,userName,
-        userAvatar,userProfile,userRole,
-        createTime,updateTime,isDelete
+        userAvatar,userProfile,userPhone,
+        userMail,userRole,createTime,
+        updateTime,isDelete
     </sql>
 </mapper>

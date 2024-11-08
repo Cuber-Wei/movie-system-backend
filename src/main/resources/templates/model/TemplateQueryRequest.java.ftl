@@ -43,7 +43,7 @@ public class ${upperDataKey}QueryRequest extends PageRequest implements Serializ
     /**
      * 标签列表
      */
-    private List<String> tags;
+    private List<String> tag;
 
     /**
      * 创建用户 id

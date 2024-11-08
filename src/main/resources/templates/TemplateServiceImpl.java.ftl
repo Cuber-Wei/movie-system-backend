@@ -85,7 +85,7 @@ public class ${upperDataKey}ServiceImpl extends ServiceImpl<${upperDataKey}Mappe
         String searchText = ${dataKey}QueryRequest.getSearchText();
         String sortField = ${dataKey}QueryRequest.getSortField();
         String sortOrder = ${dataKey}QueryRequest.getSortOrder();
-        List<String> tagList = ${dataKey}QueryRequest.getTags();
+        List<String> tagList = ${dataKey}QueryRequest.getTag();
         Long userId = ${dataKey}QueryRequest.getUserId();
         // todo 补充需要的查询条件
         // 从多字段中搜索
@@ -99,7 +99,7 @@ public class ${upperDataKey}ServiceImpl extends ServiceImpl<${upperDataKey}Mappe
         // JSON 数组查询
         if (CollUtil.isNotEmpty(tagList)) {
             for (String tag : tagList) {
-                queryWrapper.like("tags", "\"" + tag + "\"");
+                queryWrapper.like("tag", "\"" + tag + "\"");
             }
         }
         // 精确查询

@@ -2,9 +2,9 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.yupi.oj.mapper.PostFavourMapper">
+<mapper namespace="com.l0v3ch4n.oj.mapper.PostFavourMapper">
 
-    <resultMap id="BaseResultMap" type="com.yupi.oj.model.entity.PostFavour">
+    <resultMap id="BaseResultMap" type="com.l0v3ch4n.oj.model.entity.PostFavour">
             <id property="id" column="id" jdbcType="BIGINT"/>
             <result property="postId" column="postId" jdbcType="BIGINT"/>
             <result property="userId" column="userId" jdbcType="BIGINT"/>
@@ -16,4 +16,5 @@
         id,postId,userId,
         createTime,updateTime
     </sql>
+    <select id="listFavourPostByPage" resultType="com.l0v3ch4n.oj.model.entity.Post"></select>
 </mapper>

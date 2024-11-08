@@ -69,7 +69,7 @@ public class ${upperDataKey}VO implements Serializable {
         ${upperDataKey} ${dataKey} = new ${upperDataKey}();
         BeanUtils.copyProperties(${dataKey}VO, ${dataKey});
         List<String> tagList = ${dataKey}VO.getTagList();
-        ${dataKey}.setTags(JSONUtil.toJsonStr(tagList));
+        ${dataKey}.setTag(JSONUtil.toJsonStr(tagList));
         return ${dataKey};
     }
 
@@ -85,7 +85,7 @@ public class ${upperDataKey}VO implements Serializable {
         }
         ${upperDataKey}VO ${dataKey}VO = new ${upperDataKey}VO();
         BeanUtils.copyProperties(${dataKey}, ${dataKey}VO);
-        ${dataKey}VO.setTagList(JSONUtil.toList(${dataKey}.getTags(), String.class));
+        ${dataKey}VO.setTagList(JSONUtil.toList(${dataKey}.getTag(), String.class));
         return ${dataKey}VO;
     }
 }
