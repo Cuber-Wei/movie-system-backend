@@ -105,6 +105,3 @@ create table if not exists post_comment
     index idx_postId (postId),
     index idx_userId (userId)
 ) comment '帖子评论' collate = utf8mb4_unicode_ci;
-
--- INSERT INTO question (userId, title, judgeCase) VALUES (1, 'title', '[{"input":"3 4","output":"5 6"},{"input":"5 6","output":"7 8"}]');
--- [{"input":"3 4","output":"5 6"},{"input":"5 6","output":"7 8"}]

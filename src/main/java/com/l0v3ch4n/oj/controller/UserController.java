@@ -64,7 +64,7 @@ public class UserController {
         String userPhone = userRegisterRequest.getUserPhone();
         String userMail = userRegisterRequest.getUserMail();
         String verityCode = userRegisterRequest.getVerityCode();
-        if (StringUtils.isAnyBlank(userAccount, userPassword, checkPassword, userPhone, verityCode)) {
+        if (StringUtils.isAnyBlank(userAccount, userPassword, checkPassword, userPhone, userMail, verityCode)) {
             return null;
         }
         long result = userService.userRegister(userAccount, userPassword, checkPassword, userPhone, userMail, verityCode);
