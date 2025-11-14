@@ -64,7 +64,7 @@ public class WxMpController {
                     .fromEncryptedXml(request.getInputStream(), wxMpService.getWxMpConfigStorage(), timestamp,
                             nonce,
                             msgSignature);
-            log.info("message content = {}", inMessage.getContent());
+            log.info("message content = {}, from user = {}", inMessage.getContent(), inMessage.getFromUser());
             // 路由消息并处理
             WxMpXmlOutMessage outMessage = router.route(inMessage);
             if (outMessage == null) {

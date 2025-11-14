@@ -29,8 +29,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
-import static com.l0v3ch4n.oj.service.impl.UserServiceImpl.SALT;
-
 /**
  * 用户接口
  */
@@ -38,6 +36,10 @@ import static com.l0v3ch4n.oj.service.impl.UserServiceImpl.SALT;
 @RequestMapping("/user")
 @Slf4j
 public class UserController {
+    /**
+     * 盐值，混淆密码
+     */
+    public static final String SALT = "L0v3ch4n";
 
     @Resource
     private UserService userService;
@@ -89,6 +91,24 @@ public class UserController {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
         LoginUserVO loginUserVO = userService.userLoginWithAccount(userAccount, userPassword, request);
+        return ResultUtils.success(loginUserVO);
+    }
+
+    @PostMapping("/login/verity")
+    public BaseResponse<LoginUserVO> userLoginWithVerity(@RequestBody UserLoginWithVerityRequest userLoginWithVerityRequest, HttpServletRequest request) {
+        if (userLoginWithVerityRequest == null) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR);
+        }
+        String code = userLoginWithVerityRequest.getVerityCode();
+        String userMail = userLoginWithVerityRequest.getUserMail();
+        LoginUserVO loginUserVO;
+        if (StringUtils.isAnyBlank(userMail)) {
+            // 微信登录
+            loginUserVO = userService.userLoginWithVerity(code, null, request);
+        } else {
+            // 邮箱登录
+            loginUserVO = userService.userLoginWithVerity(code, userMail, request);
+        }
         return ResultUtils.success(loginUserVO);
     }
 
@@ -305,5 +325,32 @@ public class UserController {
         boolean result = userService.updateById(user);
         ThrowUtils.throwIf(!result, ErrorCode.OPERATION_ERROR);
         return ResultUtils.success(true);
+    }
+
+    @PostMapping("/forget/password")
+    public BaseResponse<Boolean> resetPassWord(@RequestBody UserForgetPasswordRequest userForgetPasswordRequest, HttpServletRequest request) {
+        if (userForgetPasswordRequest == null) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR);
+        }
+        String userAccount = userForgetPasswordRequest.getUserAccount();
+        String userPassword = userForgetPasswordRequest.getUserPassword();
+        String checkPassword = userForgetPasswordRequest.getCheckPassword();
+        String userMail = userForgetPasswordRequest.getUserMail();
+        long userId = userService.getUserIdByAccount(userAccount, userMail);
+        if (userId == -1) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR, "用户不存在！");
+        } else {
+            if (!checkPassword.equals(userPassword)) {
+                throw new BusinessException(ErrorCode.PARAMS_ERROR, "二次确认密码不正确！");
+            }
+            String encryptPassword = DigestUtils.md5DigestAsHex((SALT + userPassword).getBytes());
+            User user = new User();
+            user.setUserId(userId);
+            user.setUserPassword(encryptPassword);
+            user.setUserMail(userMail);
+            boolean result = userService.updateById(user);
+            ThrowUtils.throwIf(!result, ErrorCode.OPERATION_ERROR);
+            return ResultUtils.success(true);
+        }
     }
 }

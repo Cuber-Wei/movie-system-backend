@@ -8,7 +8,7 @@ use oj_db;
 -- 用户表
 create table if not exists user
 (
-    userId       bigint                                 auto_increment comment 'id' primary key,
+    userId       bigint auto_increment comment 'id' primary key,
     userAccount  varchar(256)                           not null comment '账号',
     userPassword varchar(512)                           not null comment '密码',
     unionId      varchar(256)                           null comment '微信开放平台id',
@@ -28,33 +28,33 @@ create table if not exists user
 -- 题目表
 create table if not exists question
 (
-    questionId      bigint                             auto_increment comment 'id' primary key,
-    userId          bigint                             not null comment '创建用户 id',
-    title           varchar(512)                       null comment '标题',
-    content         text                               null comment '内容',
-    tag             varchar(1024)                               null comment '标签列表（json 数组）',
-    answer          text                               null comment '参考答案',
-    judgeCase       varchar(1024)                               null comment '判题用例（json 数组）',
-    judgeConfig     varchar(1024)                               null comment '判题配置（json 对象）',
-    createTime      datetime default CURRENT_TIMESTAMP not null comment '创建时间',
-    updateTime      datetime default CURRENT_TIMESTAMP not null on update CURRENT_TIMESTAMP comment '更新时间',
-    isDelete        tinyint  default 0                 not null comment '是否删除',
+    questionId  bigint auto_increment comment 'id' primary key,
+    userId      bigint                             not null comment '创建用户 id',
+    title       varchar(512)                       null comment '标题',
+    content     text                               null comment '内容',
+    tag         varchar(1024)                      null comment '标签列表（json 数组）',
+    answer      text                               null comment '参考答案',
+    judgeCase   varchar(1024)                      null comment '判题用例（json 数组）',
+    judgeConfig varchar(1024)                      null comment '判题配置（json 对象）',
+    createTime  datetime default CURRENT_TIMESTAMP not null comment '创建时间',
+    updateTime  datetime default CURRENT_TIMESTAMP not null on update CURRENT_TIMESTAMP comment '更新时间',
+    isDelete    tinyint  default 0                 not null comment '是否删除',
     index idx_userId (userId)
 ) comment '题目' collate = utf8mb4_unicode_ci;
 
 -- 题目提交表
 create table if not exists question_submit
 (
-    questionSubmitId    bigint                             auto_increment comment 'id' primary key,
-    userId              bigint                             not null comment '创建用户 id',
-    questionId          bigint                             not null comment '题目 id',
-    language            varchar(128)                       not null comment '编程语言',
-    code                text                               not null comment '用户代码',
-    judgeInfo           varchar(1024)                               null comment '判题信息（json 对象）',
-    status              int      default 0                 not null comment '判题状态（0 - 待判题、1 - 判题中、2 - 成功、3 - 失败）',
-    createTime          datetime default CURRENT_TIMESTAMP not null comment '创建时间',
-    updateTime          datetime default CURRENT_TIMESTAMP not null on update CURRENT_TIMESTAMP comment '更新时间',
-    isDelete            tinyint  default 0                 not null comment '是否删除',
+    questionSubmitId bigint auto_increment comment 'id' primary key,
+    userId           bigint                             not null comment '创建用户 id',
+    questionId       bigint                             not null comment '题目 id',
+    language         varchar(128)                       not null comment '编程语言',
+    code             text                               not null comment '用户代码',
+    judgeInfo        varchar(1024)                      null comment '判题信息（json 对象）',
+    status           int      default 0                 not null comment '判题状态（0 - 待判题、1 - 判题中、2 - 成功、3 - 失败）',
+    createTime       datetime default CURRENT_TIMESTAMP not null comment '创建时间',
+    updateTime       datetime default CURRENT_TIMESTAMP not null on update CURRENT_TIMESTAMP comment '更新时间',
+    isDelete         tinyint  default 0                 not null comment '是否删除',
     index idx_questionId (questionId),
     index idx_userId (userId)
 ) comment '题目提交';
@@ -62,16 +62,16 @@ create table if not exists question_submit
 -- 题解表
 create table if not exists write_up
 (
-    writeUpId       bigint                             auto_increment comment 'id' primary key,
-    userId          bigint                             not null comment '创建用户 id',
-    questionId      bigint                             not null comment '题目 id',
-    title           varchar(512)                       null comment '标题',
-    content         text                               null comment '内容',
-    tag             varchar(1024)                               null comment '标签列表（json 数组）',
-    reviewStatus    int      default 0                 not null comment '审核状态（0 - 待审核、1 - 审核通过、2 - 审核未通过）',
-    createTime      datetime default CURRENT_TIMESTAMP not null comment '创建时间',
-    updateTime      datetime default CURRENT_TIMESTAMP not null on update CURRENT_TIMESTAMP comment '更新时间',
-    isDelete        tinyint  default 0                 not null comment '是否删除',
+    writeUpId    bigint auto_increment comment 'id' primary key,
+    userId       bigint                             not null comment '创建用户 id',
+    questionId   bigint                             not null comment '题目 id',
+    title        varchar(512)                       null comment '标题',
+    content      text                               null comment '内容',
+    tag          varchar(1024)                      null comment '标签列表（json 数组）',
+    reviewStatus int      default 0                 not null comment '审核状态（0 - 待审核、1 - 审核通过、2 - 审核未通过）',
+    createTime   datetime default CURRENT_TIMESTAMP not null comment '创建时间',
+    updateTime   datetime default CURRENT_TIMESTAMP not null on update CURRENT_TIMESTAMP comment '更新时间',
+    isDelete     tinyint  default 0                 not null comment '是否删除',
     index idx_questionId (questionId),
     index idx_userId (userId)
 ) comment '题解' collate = utf8mb4_unicode_ci;
@@ -79,29 +79,41 @@ create table if not exists write_up
 -- 帖子表
 create table if not exists post
 (
-    postId          bigint                             auto_increment comment 'id' primary key,
-    userId          bigint                             not null comment '创建用户 id',
-    title           varchar(512)                       null comment '标题',
-    content         text                               null comment '内容',
-    tag             varchar(1024)                               null comment '标签列表（json 数组）',
-    reviewStatus    int      default 0                 not null comment '审核状态（0 - 待审核、1 - 审核通过、2 - 审核未通过）',
-    createTime      datetime default CURRENT_TIMESTAMP not null comment '创建时间',
-    updateTime      datetime default CURRENT_TIMESTAMP not null on update CURRENT_TIMESTAMP comment '更新时间',
-    isDelete        tinyint  default 0                 not null comment '是否删除',
+    postId       bigint auto_increment comment 'id' primary key,
+    userId       bigint                             not null comment '创建用户 id',
+    title        varchar(512)                       null comment '标题',
+    content      text                               null comment '内容',
+    tag          varchar(1024)                      null comment '标签列表（json 数组）',
+    reviewStatus int      default 0                 not null comment '审核状态（0 - 待审核、1 - 审核通过、2 - 审核未通过）',
+    createTime   datetime default CURRENT_TIMESTAMP not null comment '创建时间',
+    updateTime   datetime default CURRENT_TIMESTAMP not null on update CURRENT_TIMESTAMP comment '更新时间',
+    isDelete     tinyint  default 0                 not null comment '是否删除',
     index idx_userId (userId)
 ) comment '帖子' collate = utf8mb4_unicode_ci;
 
 -- 帖子评论表
 create table if not exists post_comment
 (
-    postCommentId   bigint                             auto_increment comment 'id' primary key,
-    userId          bigint                             not null comment '创建用户 id',
-    postId          bigint                             not null comment '帖子 id',
-    content         text                               not null comment '评论内容',
-    reviewStatus    int      default 0                 not null comment '审核状态（0 - 待审核、1 - 审核通过、2 - 审核未通过）',
-    createTime      datetime default CURRENT_TIMESTAMP not null comment '创建时间',
-    updateTime      datetime default CURRENT_TIMESTAMP not null on update CURRENT_TIMESTAMP comment '更新时间',
-    isDelete        tinyint  default 0                 not null comment '是否删除',
+    postCommentId bigint auto_increment comment 'id' primary key,
+    userId        bigint                             not null comment '创建用户 id',
+    postId        bigint                             not null comment '帖子 id',
+    content       text                               not null comment '评论内容',
+    reviewStatus  int      default 0                 not null comment '审核状态（0 - 待审核、1 - 审核通过、2 - 审核未通过）',
+    createTime    datetime default CURRENT_TIMESTAMP not null comment '创建时间',
+    updateTime    datetime default CURRENT_TIMESTAMP not null on update CURRENT_TIMESTAMP comment '更新时间',
+    isDelete      tinyint  default 0                 not null comment '是否删除',
     index idx_postId (postId),
     index idx_userId (userId)
 ) comment '帖子评论' collate = utf8mb4_unicode_ci;
+
+-- 验证码表
+create table if not exists verity_code
+(
+    codeId     bigint auto_increment comment 'id' primary key,
+    userId     varchar(256)                       not null comment '验证码对应用户 UnionId',
+    code       text                               not null comment '验证码内容',
+    createTime datetime default CURRENT_TIMESTAMP not null comment '创建时间',
+    updateTime datetime default CURRENT_TIMESTAMP not null on update CURRENT_TIMESTAMP comment '更新时间',
+    isDelete   tinyint  default 0                 not null comment '是否删除',
+    index idx_userId (userId)
+) comment '验证码' collate = utf8mb4_unicode_ci;

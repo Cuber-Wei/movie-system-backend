@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.l0v3ch4n.oj.mapper.VerityCodeMapper">
+
+    <resultMap id="BaseResultMap" type="com.l0v3ch4n.oj.model.entity.VerityCode">
+            <id property="codeId" column="codeId" jdbcType="BIGINT"/>
+            <result property="userId" column="userId" jdbcType="VARCHAR"/>
+            <result property="code" column="code" jdbcType="VARCHAR"/>
+            <result property="createTime" column="createTime" jdbcType="TIMESTAMP"/>
+            <result property="updateTime" column="updateTime" jdbcType="TIMESTAMP"/>
+            <result property="isDelete" column="isDelete" jdbcType="TINYINT"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        codeId,userId,code,createTime,updateTime,isDelete
+    </sql>
+</mapper>

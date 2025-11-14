@@ -19,7 +19,7 @@ public class SubscribeHandler implements WxMpMessageHandler {
     @Override
     public WxMpXmlOutMessage handle(WxMpXmlMessage wxMpXmlMessage, Map<String, Object> map,
                                     WxMpService wxMpService, WxSessionManager wxSessionManager) throws WxErrorException {
-        final String content = "感谢关注";
+        final String content = "感谢关注，这里是L0v3ch4n，一个计科专业的学生。\n\n若要登录OJ系统，请发送“登录OJ”获取验证码。";
         // 调用接口，返回验证码
         return WxMpXmlOutMessage.TEXT().content(content)
                 .fromUser(wxMpXmlMessage.getToUser())

@@ -37,6 +37,17 @@ public interface UserService extends IService<User> {
     LoginUserVO userLoginWithAccount(String userAccount, String userPassword, HttpServletRequest request);
 
     /**
+     * 验证码登录
+     *
+     * @param code     验证码
+     * @param userMail 邮箱
+     * @param request
+     * @return 登录用户信息
+     */
+    LoginUserVO userLoginWithVerity(String code, String userMail, HttpServletRequest request);
+
+
+    /**
      * 用户登录（微信开放平台）
      *
      * @param wxOAuth2UserInfo 从微信获取的用户信息
@@ -115,5 +126,13 @@ public interface UserService extends IService<User> {
      * @return
      */
     QueryWrapper<User> getQueryWrapper(UserQueryRequest userQueryRequest);
+
+    /**
+     * 通过用户名获取用户id
+     *
+     * @param userAccount 用户名
+     * @return 用户id
+     */
+    long getUserIdByAccount(String userAccount, String userMail);
 
 }

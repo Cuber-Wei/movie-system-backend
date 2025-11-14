@@ -38,7 +38,7 @@ public class SMSController {
         }
         Random random = new Random();
         String code = String.valueOf(random.nextInt(900000) + 100000);
-        emailService.sendText("l0v3ch4n@qq.com", mailAddress, "OJ平台账号注册验证码", "亲爱的用户，感谢您注册本平台！\n注册验证码如下：\n" + code);
+        emailService.sendText("l0v3ch4n@qq.com", mailAddress, "OJ平台账号注册/登录验证码", "亲爱的用户，感谢您注册本平台！\n注册验证码如下：\n" + code);
         return ResultUtils.success(code);
     }
 

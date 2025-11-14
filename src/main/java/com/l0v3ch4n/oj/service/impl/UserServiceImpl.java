@@ -14,6 +14,7 @@ import com.l0v3ch4n.oj.model.enums.UserRoleEnum;
 import com.l0v3ch4n.oj.model.vo.LoginUserVO;
 import com.l0v3ch4n.oj.model.vo.UserVO;
 import com.l0v3ch4n.oj.service.UserService;
+import com.l0v3ch4n.oj.service.VerityCodeService;
 import com.l0v3ch4n.oj.utils.SqlUtils;
 import lombok.extern.slf4j.Slf4j;
 import me.chanjar.weixin.common.bean.WxOAuth2UserInfo;
@@ -22,6 +23,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.util.DigestUtils;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
@@ -38,6 +40,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
      * 盐值，混淆密码
      */
     public static final String SALT = "L0v3ch4n";
+    @Resource
+    private VerityCodeService verityCodeService;
 
     @Override
     public long userRegister(String userAccount, String userPassword, String checkPassword, String userPhone, String userMail, String verityCode) {
@@ -63,10 +67,15 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
             QueryWrapper<User> queryWrapper = new QueryWrapper<>();
             queryWrapper.eq("userAccount", userAccount);
             long count = this.baseMapper.selectCount(queryWrapper);
+            QueryWrapper<User> queryWrapperMail = new QueryWrapper<>();
+            queryWrapperMail.eq("userMail", userMail);
+            long countMail = this.baseMapper.selectCount(queryWrapperMail);
             if (count > 0) {
                 throw new BusinessException(ErrorCode.PARAMS_ERROR, "账号重复");
             }
-            // todo: 验证码校验逻辑
+            if (countMail > 0) {
+                throw new BusinessException(ErrorCode.PARAMS_ERROR, "邮箱重复");
+            }
             // 2. 加密
             String encryptPassword = DigestUtils.md5DigestAsHex((SALT + userPassword).getBytes());
             // 3. 插入数据
@@ -113,6 +122,47 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         // 3. 记录用户的登录态
         request.getSession().setAttribute(UserConstant.USER_LOGIN_STATE, user);
         return this.getLoginUserVO(user);
+    }
+
+    @Override
+    public LoginUserVO userLoginWithVerity(String code, String userMail, HttpServletRequest request) {
+        if (userMail == null && !StringUtils.isBlank(code)) {
+            // 通过验证码查找公众id，并创建新用户
+            String mpOpenId = verityCodeService.checkCode(code);
+            if (mpOpenId == null) {
+                throw new BusinessException(ErrorCode.NOT_FOUND_ERROR, "找不到对对应用户");
+            }
+            QueryWrapper<User> queryWrapper = new QueryWrapper<>();
+            queryWrapper.eq("mpOpenId", mpOpenId);
+            User user = this.baseMapper.selectOne(queryWrapper);
+            // 用户不存在
+            if (user == null) {
+                user = new User();
+                user.setUserAccount("微信用户" + DigestUtils.md5DigestAsHex((SALT + mpOpenId).getBytes()));
+                user.setUserName("微信用户" + DigestUtils.md5DigestAsHex((SALT + mpOpenId).getBytes()));
+                user.setUserPassword("1234567890");
+                user.setUnionId(mpOpenId);
+                boolean saveResult = this.save(user);
+                if (!saveResult) {
+                    throw new BusinessException(ErrorCode.SYSTEM_ERROR, "注册失败，数据库错误");
+                }
+            }
+            request.getSession().setAttribute(UserConstant.USER_LOGIN_STATE, user);
+            return this.getLoginUserVO(user);
+        } else {
+            // 通过userMail查找用户
+            QueryWrapper<User> queryWrapper = new QueryWrapper<>();
+            queryWrapper.eq("userMail", userMail);
+            User user = this.baseMapper.selectOne(queryWrapper);
+            // 用户不存在
+            if (user == null) {
+                log.info("user login failed, userMail cannot match userMail");
+                throw new BusinessException(ErrorCode.PARAMS_ERROR, "用户不存在或密码错误");
+            }
+            // 记录用户的登录态
+            request.getSession().setAttribute(UserConstant.USER_LOGIN_STATE, user);
+            return this.getLoginUserVO(user);
+        }
     }
 
     @Override
@@ -274,5 +324,27 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         queryWrapper.orderBy(SqlUtils.validSortField(sortField), sortOrder.equals(CommonConstant.SORT_ORDER_ASC),
                 sortField);
         return queryWrapper;
+    }
+
+    @Override
+    public long getUserIdByAccount(String userAccount, String userMail) {
+        if (StringUtils.isBlank(userAccount)) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR, "请求参数为空");
+        }
+        QueryWrapper<User> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("userAccount", userAccount);
+        long count = this.baseMapper.selectCount(queryWrapper);
+        if (count == 0) {
+            return -1;
+        } else if (count == 1) {
+            User user = this.baseMapper.selectOne(queryWrapper);
+            return user.getUserId();
+        } else {
+            queryWrapper = new QueryWrapper<>();
+            queryWrapper.eq("userAccount", userAccount);
+            queryWrapper.eq("userMail", userMail);
+            User user = this.baseMapper.selectOne(queryWrapper);
+            return user.getUserId();
+        }
     }
 }

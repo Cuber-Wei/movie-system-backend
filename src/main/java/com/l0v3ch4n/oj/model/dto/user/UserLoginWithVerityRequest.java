@@ -13,9 +13,9 @@ public class UserLoginWithVerityRequest implements Serializable {
     private static final long serialVersionUID = 3191241716373120793L;
 
     /**
-     * 用户手机号
+     * 验证码
      */
-    private String userPhone;
+    private String verityCode;
 
     /**
      * 用户邮箱
