@@ -15,6 +15,8 @@ import com.l0v3ch4n.oj.model.dto.writeup.WriteUpQueryRequest;
 import com.l0v3ch4n.oj.model.entity.Post;
 import com.l0v3ch4n.oj.model.entity.PostComment;
 import com.l0v3ch4n.oj.model.entity.WriteUp;
+import com.l0v3ch4n.oj.model.enums.AuditTypeEnum;
+import com.l0v3ch4n.oj.model.enums.ReviewStatusEnum;
 import com.l0v3ch4n.oj.service.AuditService;
 import com.l0v3ch4n.oj.service.PostCommentService;
 import com.l0v3ch4n.oj.service.PostService;
@@ -86,8 +88,8 @@ public class AuditController {
         if (auditRequest == null || auditRequest.getId() <= 0) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
-        int result = auditService.doAudit(auditRequest.getId(), auditRequest.getType(),
-                auditRequest.getOperation(), request);
+        int result = auditService.doAudit(auditRequest.getId(), AuditTypeEnum.getEnumByValue(auditRequest.getType()),
+                ReviewStatusEnum.getEnumByValue(auditRequest.getOperation()), request);
         return ResultUtils.success(result == 1);
     }
 }

@@ -13,6 +13,10 @@ public class WriteUpAddRequest implements Serializable {
 
     private static final long serialVersionUID = 1L;
     /**
+     * 题目id
+     */
+    private Long questionId;
+    /**
      * 标题
      */
     private String title;

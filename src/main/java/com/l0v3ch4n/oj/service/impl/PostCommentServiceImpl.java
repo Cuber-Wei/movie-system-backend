@@ -1,118 +1,73 @@
 package com.l0v3ch4n.oj.service.impl;
 
-import com.baomidou.mybatisplus.core.conditions.Wrapper;
+import cn.hutool.core.collection.CollUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.l0v3ch4n.oj.common.ErrorCode;
-import com.l0v3ch4n.oj.constant.AuditConstant;
 import com.l0v3ch4n.oj.constant.CommonConstant;
 import com.l0v3ch4n.oj.exception.BusinessException;
+import com.l0v3ch4n.oj.exception.ThrowUtils;
 import com.l0v3ch4n.oj.mapper.PostCommentMapper;
+import com.l0v3ch4n.oj.model.dto.postcomment.PostCommentEsDTO;
 import com.l0v3ch4n.oj.model.dto.postcomment.PostCommentQueryRequest;
-import com.l0v3ch4n.oj.model.entity.Post;
 import com.l0v3ch4n.oj.model.entity.PostComment;
 import com.l0v3ch4n.oj.model.entity.User;
+import com.l0v3ch4n.oj.model.vo.PostCommentVO;
+import com.l0v3ch4n.oj.model.vo.UserVO;
 import com.l0v3ch4n.oj.service.PostCommentService;
-import com.l0v3ch4n.oj.service.PostService;
+import com.l0v3ch4n.oj.service.UserService;
 import com.l0v3ch4n.oj.utils.SqlUtils;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.aop.framework.AopContext;
+import org.elasticsearch.index.query.BoolQueryBuilder;
+import org.elasticsearch.index.query.QueryBuilders;
+import org.elasticsearch.search.sort.SortBuilder;
+import org.elasticsearch.search.sort.SortBuilders;
+import org.elasticsearch.search.sort.SortOrder;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.elasticsearch.core.ElasticsearchRestTemplate;
+import org.springframework.data.elasticsearch.core.SearchHit;
+import org.springframework.data.elasticsearch.core.SearchHits;
+import org.springframework.data.elasticsearch.core.query.NativeSearchQuery;
+import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilder;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
- * @author weichenghao
- * @description 针对表【post_comment(帖子评论)】的数据库操作Service实现
- * @createDate 2025-11-14 20:31:03
+ * 帖子服务实现
  */
 @Service
-public class PostCommentServiceImpl extends ServiceImpl<PostCommentMapper, PostComment>
-        implements PostCommentService {
+@Slf4j
+public class PostCommentServiceImpl extends ServiceImpl<PostCommentMapper, PostComment> implements PostCommentService {
+
     @Resource
-    private PostService postService;
+    private UserService userService;
 
-    /**
-     * 帖子评论
-     *
-     * @param postId
-     * @param loginUser
-     * @param comment
-     * @return
-     */
-    @Override
-    public int doPostComment(long postId, User loginUser, String comment) {
-        // 判断是否存在
-        Post post = postService.getById(postId);
-        if (post == null) {
-            throw new BusinessException(ErrorCode.NOT_FOUND_ERROR);
-        }
-        // 是否已帖子评论
-        long userId = loginUser.getUserId();
-        // 每个用户串行帖子评论
-        // 锁必须要包裹住事务方法
-        PostCommentService postCommentService = (PostCommentService) AopContext.currentProxy();
-        synchronized (String.valueOf(userId).intern()) {
-            return postCommentService.doPostCommentInner(userId, postId, comment);
-        }
-    }
+    @Resource
+    private ElasticsearchRestTemplate elasticsearchRestTemplate;
 
     @Override
-    public Page<Post> listCommentPostByPage(IPage<Post> page, Wrapper<Post> queryWrapper, long CommentUserId) {
-        if (CommentUserId <= 0) {
-            return new Page<>();
+    public void validPostComment(PostComment postComment, boolean add) {
+        if (postComment == null) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
-        return baseMapper.listCommentPostByPage(page, queryWrapper, CommentUserId);
-    }
-
-    @Override
-    public int deletePostComment(long postId, long commentId, long userId) {
-        if (commentId <= 0 || postId <= 0) {
-            throw new BusinessException(ErrorCode.NOT_FOUND_ERROR);
+        String content = postComment.getContent();
+        // 创建时，参数不能为空
+        if (add) {
+            ThrowUtils.throwIf(StringUtils.isAnyBlank(content), ErrorCode.PARAMS_ERROR);
         }
-        PostComment postComment = new PostComment();
-        postComment.setUserId(userId);
-        postComment.setPostId(postId);
-        postComment.setPostCommentId(commentId);
-        QueryWrapper<PostComment> postCommentQueryWrapper = new QueryWrapper<>(postComment);
-        PostComment oldPostComment = this.getOne(postCommentQueryWrapper);
-        boolean result;
-        if (oldPostComment == null) {
-            throw new BusinessException(ErrorCode.NOT_FOUND_ERROR);
-        }
-        result = this.remove(postCommentQueryWrapper);
-        if (result) {
-            return 1;
-        } else {
-            throw new BusinessException(ErrorCode.NOT_FOUND_ERROR);
-        }
-    }
-
-    /**
-     * 封装了事务的方法
-     *
-     * @param userId
-     * @param postId
-     * @param comment
-     * @return
-     */
-    @Override
-    @Transactional(rollbackFor = Exception.class)
-    public int doPostCommentInner(long userId, long postId, String comment) {
-        PostComment postComment = new PostComment();
-        postComment.setUserId(userId);
-        postComment.setPostId(postId);
-        postComment.setContent(comment);
-        postComment.setReviewStatus(AuditConstant.PENDING);
-        boolean result = this.save(postComment);
-        if (result) {
-            return 1;
-        } else {
-            throw new BusinessException(ErrorCode.SYSTEM_ERROR);
+        // 有参数则校验
+        if (StringUtils.isNotBlank(content) && content.length() > 8192) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR, "内容过长");
         }
     }
 
@@ -128,21 +83,145 @@ public class PostCommentServiceImpl extends ServiceImpl<PostCommentMapper, PostC
         if (postCommentQueryRequest == null) {
             return queryWrapper;
         }
+        String searchText = postCommentQueryRequest.getSearchText();
         String sortField = postCommentQueryRequest.getSortField();
         String sortOrder = postCommentQueryRequest.getSortOrder();
-        String content = postCommentQueryRequest.getContent();
         Long id = postCommentQueryRequest.getPostCommentId();
-        Long postId = postCommentQueryRequest.getPostId();
+        String content = postCommentQueryRequest.getContent();
         Long userId = postCommentQueryRequest.getUserId();
-
+        Long notId = postCommentQueryRequest.getNotPostCommentId();
+        Integer reviewStatus = postCommentQueryRequest.getReviewStatus();
+        Integer notReviewStatus = postCommentQueryRequest.getNotReviewStatus();
+        // 拼接查询条件
+        if (StringUtils.isNotBlank(searchText)) {
+            queryWrapper.and(qw -> qw.like("title", searchText).or().like("content", searchText));
+        }
         queryWrapper.like(StringUtils.isNotBlank(content), "content", content);
+        queryWrapper.ne(ObjectUtils.isNotEmpty(notId), "id", notId);
         queryWrapper.eq(ObjectUtils.isNotEmpty(id), "id", id);
         queryWrapper.eq(ObjectUtils.isNotEmpty(userId), "userId", userId);
-        queryWrapper.eq(ObjectUtils.isNotEmpty(postId), "postId", postId);
+        queryWrapper.eq(ObjectUtils.isNotEmpty(reviewStatus), "reviewStatus", reviewStatus);
+        queryWrapper.ne(ObjectUtils.isNotEmpty(notReviewStatus), "notReviewStatus", notReviewStatus);
         queryWrapper.orderBy(SqlUtils.validSortField(sortField), sortOrder.equals(CommonConstant.SORT_ORDER_ASC),
                 sortField);
         return queryWrapper;
     }
+
+    @Override
+    public Page<PostComment> searchFromEs(PostCommentQueryRequest postCommentQueryRequest) {
+        Long id = postCommentQueryRequest.getPostCommentId();
+        Long notId = postCommentQueryRequest.getNotPostCommentId();
+        String searchText = postCommentQueryRequest.getSearchText();
+        String content = postCommentQueryRequest.getContent();
+        Long userId = postCommentQueryRequest.getUserId();
+        // es 起始页为 0
+        long current = postCommentQueryRequest.getCurrent() - 1;
+        long pageSize = postCommentQueryRequest.getPageSize();
+        String sortField = postCommentQueryRequest.getSortField();
+        String sortOrder = postCommentQueryRequest.getSortOrder();
+        BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery();
+        // 过滤
+        boolQueryBuilder.filter(QueryBuilders.termQuery("isDelete", 0));
+        if (id != null) {
+            boolQueryBuilder.filter(QueryBuilders.termQuery("id", id));
+        }
+        if (notId != null) {
+            boolQueryBuilder.mustNot(QueryBuilders.termQuery("id", notId));
+        }
+        if (userId != null) {
+            boolQueryBuilder.filter(QueryBuilders.termQuery("userId", userId));
+        }
+        // 按关键词检索
+        if (StringUtils.isNotBlank(searchText)) {
+            boolQueryBuilder.should(QueryBuilders.matchQuery("title", searchText));
+            boolQueryBuilder.should(QueryBuilders.matchQuery("description", searchText));
+            boolQueryBuilder.should(QueryBuilders.matchQuery("content", searchText));
+            boolQueryBuilder.minimumShouldMatch(1);
+        }
+        // 按内容检索
+        if (StringUtils.isNotBlank(content)) {
+            boolQueryBuilder.should(QueryBuilders.matchQuery("content", content));
+            boolQueryBuilder.minimumShouldMatch(1);
+        }
+        // 排序
+        SortBuilder<?> sortBuilder = SortBuilders.scoreSort();
+        if (StringUtils.isNotBlank(sortField)) {
+            sortBuilder = SortBuilders.fieldSort(sortField);
+            sortBuilder.order(CommonConstant.SORT_ORDER_ASC.equals(sortOrder) ? SortOrder.ASC : SortOrder.DESC);
+        }
+        // 分页
+        PageRequest pageRequest = PageRequest.of((int) current, (int) pageSize);
+        // 构造查询
+        NativeSearchQuery searchQuery = new NativeSearchQueryBuilder().withQuery(boolQueryBuilder)
+                .withPageable(pageRequest).withSorts(sortBuilder).build();
+        SearchHits<PostCommentEsDTO> searchHits = elasticsearchRestTemplate.search(searchQuery, PostCommentEsDTO.class);
+        Page<PostComment> page = new Page<>();
+        page.setTotal(searchHits.getTotalHits());
+        List<PostComment> resourceList = new ArrayList<>();
+        // 查出结果后，从 db 获取最新动态数据（比如点赞数）
+        if (searchHits.hasSearchHits()) {
+            List<SearchHit<PostCommentEsDTO>> searchHitList = searchHits.getSearchHits();
+            List<Long> postCommentIdList = searchHitList.stream().map(searchHit -> searchHit.getContent().getPostCommentId())
+                    .collect(Collectors.toList());
+            List<PostComment> postCommentList = baseMapper.selectBatchIds(postCommentIdList);
+            if (postCommentList != null) {
+                Map<Long, List<PostComment>> idPostCommentMap = postCommentList.stream().collect(Collectors.groupingBy(PostComment::getPostCommentId));
+                postCommentIdList.forEach(postCommentId -> {
+                    if (idPostCommentMap.containsKey(postCommentId)) {
+                        resourceList.add(idPostCommentMap.get(postCommentId).get(0));
+                    } else {
+                        // 从 es 清空 db 已物理删除的数据
+                        String delete = elasticsearchRestTemplate.delete(String.valueOf(postCommentId), PostCommentEsDTO.class);
+                        log.info("delete postComment {}", delete);
+                    }
+                });
+            }
+        }
+        page.setRecords(resourceList);
+        return page;
+    }
+
+    @Override
+    public PostCommentVO getPostCommentVO(PostComment postComment, HttpServletRequest request) {
+        PostCommentVO postCommentVO = PostCommentVO.objToVo(postComment);
+        long postCommentId = postComment.getPostCommentId();
+        // 1. 关联查询用户信息
+        Long userId = postComment.getUserId();
+        User user = null;
+        if (userId != null && userId > 0) {
+            user = userService.getById(userId);
+        }
+        UserVO userVO = userService.getUserVO(user);
+        postCommentVO.setUser(userVO);
+        return postCommentVO;
+    }
+
+    @Override
+    public Page<PostCommentVO> getPostCommentVOPage(Page<PostComment> postCommentPage, HttpServletRequest request) {
+        List<PostComment> postCommentList = postCommentPage.getRecords();
+        Page<PostCommentVO> postCommentVOPage = new Page<>(postCommentPage.getCurrent(), postCommentPage.getSize(), postCommentPage.getTotal());
+        if (CollUtil.isEmpty(postCommentList)) {
+            return postCommentVOPage;
+        }
+        // 1. 关联查询用户信息
+        Set<Long> userIdSet = postCommentList.stream().map(PostComment::getUserId).collect(Collectors.toSet());
+        Map<Long, List<User>> userIdUserListMap = userService.listByIds(userIdSet).stream()
+                .collect(Collectors.groupingBy(User::getUserId));
+        // 填充信息
+        List<PostCommentVO> postCommentVOList = postCommentList.stream().map(postComment -> {
+            PostCommentVO postCommentVO = PostCommentVO.objToVo(postComment);
+            Long userId = postComment.getUserId();
+            User user = null;
+            if (userIdUserListMap.containsKey(userId)) {
+                user = userIdUserListMap.get(userId).get(0);
+            }
+            postCommentVO.setUser(userService.getUserVO(user));
+            return postCommentVO;
+        }).collect(Collectors.toList());
+        postCommentVOPage.setRecords(postCommentVOList);
+        return postCommentVOPage;
+    }
+
 }
 
 

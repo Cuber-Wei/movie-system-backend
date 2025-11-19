@@ -6,7 +6,7 @@ spring:
   # todo 需替换配置
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: 
+    url: jdbc:mysql://localhost:3306/oj_db
     username:
     password:
   # Redis 配置
@@ -17,19 +17,58 @@ spring:
     port: 6379
     timeout: 5000
     password:
-  # Elasticsearch 配置
-  # todo 需替换配置
-  elasticsearch:
-    uris:
+  # 验证邮件
+  mail:
+    host: smtp.qq.com
+    # 端口号
+    port: 587
+    # 发送邮件的邮箱地址
     username:
+    # QQ邮箱获得的授权码
     password:
+    # 邮箱编码
+    default-encoding: UTF-8
+    # 配置SSL 加密工厂
+    properties: # 设置邮件超时时间防止服务器阻塞
+      timeout: 5000
+      connection-timeout: 5000
+      write-timeout: 5000
+      mail:
+        smtp:
+          starttls:
+            enable: true
+          socketFactoryClass: javax.net.ssl.SSLSocketFactory
 mybatis-plus:
   configuration:
     # 生产环境关闭日志
     log-impl: ''
+# 微信相关
+wx:
+  # 微信公众平台
+  # todo 需替换配置
+  mp:
+    token:
+    aesKey:
+    appId:
+    secret:
+    config-storage:
+      http-client-type: HttpClient
+      key-prefix: wx
+      redis:
+        host: 127.0.0.1
+        port: 6379
+      type: Memory
+  # 微信开放平台
+  # todo 需替换配置
+  open:
+    appId: xxx
+    appSecret: xxx
 # 接口文档配置
 knife4j:
   basic:
     enable: true
     username:
     password:
+# 代码沙箱配置
+codesandbox:
+  type: remote

@@ -10,7 +10,7 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * 帖子视图
+ * 题解视图
  */
 @Data
 public class WriteUpVO implements Serializable {

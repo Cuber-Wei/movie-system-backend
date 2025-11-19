@@ -20,8 +20,8 @@ spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:3306/oj_db
-    username: root
-    password: Wei-040618
+    username:
+    password:
   # Redis 配置
   # todo 需替换配置，然后取消注释
 #  redis:
@@ -47,9 +47,9 @@ spring:
     # 端口号
     port: 587
     # 发送邮件的邮箱地址
-    username: l0v3ch4n@qq.com
+    username:
     # QQ邮箱获得的授权码
-    password: dnxaxauujpqrdhac
+    password:
     # 邮箱编码
     default-encoding: UTF-8
     # 配置SSL 加密工厂
@@ -87,7 +87,7 @@ wx:
   # 微信公众平台
   # todo 需替换配置
   mp:
-    token: L0v3ch4n
+    token:
     aesKey:
     appId:
     secret:
@@ -124,4 +124,4 @@ knife4j:
           - com.l0v3ch4n.oj.controller
 # 代码沙箱配置
 codesandbox:
-  type: example
+  type: remote

@@ -5,6 +5,7 @@ import com.l0v3ch4n.oj.common.BaseResponse;
 import com.l0v3ch4n.oj.common.ErrorCode;
 import com.l0v3ch4n.oj.common.ResultUtils;
 import com.l0v3ch4n.oj.exception.BusinessException;
+import com.l0v3ch4n.oj.judge.JudgeService;
 import com.l0v3ch4n.oj.model.dto.questionsubmit.QuestionSubmitAddRequest;
 import com.l0v3ch4n.oj.model.dto.questionsubmit.QuestionSubmitQueryRequest;
 import com.l0v3ch4n.oj.model.entity.QuestionSubmit;
@@ -27,8 +28,9 @@ import javax.servlet.http.HttpServletRequest;
 public class QuestionSubmitController {
 
     @Resource
+    JudgeService judgeService;
+    @Resource
     private QuestionSubmitService questionSubmitService;
-
     @Resource
     private UserService userService;
 
@@ -48,6 +50,7 @@ public class QuestionSubmitController {
         // 登录才能提交
         final User loginUser = userService.getLoginUser(request);
         long questionSubmitId = questionSubmitService.doQuestionSubmit(questionSubmitAddRequest, loginUser);
+        judgeService.doJudge(questionSubmitId);
         return ResultUtils.success(questionSubmitId);
     }
 

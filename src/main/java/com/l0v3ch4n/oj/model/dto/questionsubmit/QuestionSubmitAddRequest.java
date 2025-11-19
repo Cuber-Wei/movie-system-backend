@@ -23,4 +23,8 @@ public class QuestionSubmitAddRequest implements Serializable {
      * 题目 id
      */
     private Long questionId;
+    /**
+     * 用户 id
+     */
+    private Long userId;
 }

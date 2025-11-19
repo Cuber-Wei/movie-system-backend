@@ -97,6 +97,8 @@ public class WriteUpServiceImpl extends ServiceImpl<WriteUpMapper, WriteUp> impl
         List<String> tagList = writeUpQueryRequest.getTag();
         Long userId = writeUpQueryRequest.getUserId();
         Long notId = writeUpQueryRequest.getNotWriteUpId();
+        Integer reviewStatus = writeUpQueryRequest.getReviewStatus();
+        Integer notReviewStatus = writeUpQueryRequest.getNotReviewStatus();
         // 拼接查询条件
         if (StringUtils.isNotBlank(searchText)) {
             queryWrapper.and(qw -> qw.like("title", searchText).or().like("content", searchText));
@@ -111,6 +113,8 @@ public class WriteUpServiceImpl extends ServiceImpl<WriteUpMapper, WriteUp> impl
         queryWrapper.ne(ObjectUtils.isNotEmpty(notId), "id", notId);
         queryWrapper.eq(ObjectUtils.isNotEmpty(id), "id", id);
         queryWrapper.eq(ObjectUtils.isNotEmpty(userId), "userId", userId);
+        queryWrapper.eq(ObjectUtils.isNotEmpty(reviewStatus), "reviewStatus", reviewStatus);
+        queryWrapper.ne(ObjectUtils.isNotEmpty(notReviewStatus), "notReviewStatus", notReviewStatus);
         queryWrapper.orderBy(SqlUtils.validSortField(sortField), sortOrder.equals(CommonConstant.SORT_ORDER_ASC),
                 sortField);
         return queryWrapper;

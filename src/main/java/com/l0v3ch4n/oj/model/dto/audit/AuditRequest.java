@@ -1,12 +1,19 @@
 package com.l0v3ch4n.oj.model.dto.audit;
 
-import com.l0v3ch4n.oj.model.enums.AuditTypeEnum;
-import com.l0v3ch4n.oj.model.enums.ReviewStatusEnum;
 import lombok.Data;
 
 @Data
 public class AuditRequest {
+    /**
+     * 项目 id
+     */
     private Long id;
-    private AuditTypeEnum type;
-    private ReviewStatusEnum operation;
+    /**
+     * 项目类型
+     */
+    private Integer type;
+    /**
+     * 审核操作
+     */
+    private Integer operation;
 }

@@ -19,6 +19,14 @@ public class PostCommentQueryRequest extends PageRequest implements Serializable
      */
     private Long postCommentId;
     /**
+     * not id
+     */
+    private Long notPostCommentId;
+    /**
+     * 搜索词
+     */
+    private String searchText;
+    /**
      * 帖子id
      */
     private Long postId;
@@ -30,6 +38,10 @@ public class PostCommentQueryRequest extends PageRequest implements Serializable
      * 审核状态
      */
     private Integer reviewStatus;
+    /**
+     * not 审核状态
+     */
+    private Integer notReviewStatus;
     /**
      * 创建用户 id
      */

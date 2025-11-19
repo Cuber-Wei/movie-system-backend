@@ -48,6 +48,10 @@ public class PostQueryRequest extends PageRequest implements Serializable {
      */
     private Integer reviewStatus;
     /**
+     * not 审核状态
+     */
+    private Integer notReviewStatus;
+    /**
      * 创建用户 id
      */
     private Long userId;
