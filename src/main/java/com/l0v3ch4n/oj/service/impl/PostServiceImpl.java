@@ -114,7 +114,7 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements Po
         queryWrapper.eq(ObjectUtils.isNotEmpty(id), "id", id);
         queryWrapper.eq(ObjectUtils.isNotEmpty(userId), "userId", userId);
         queryWrapper.eq(ObjectUtils.isNotEmpty(reviewStatus), "reviewStatus", reviewStatus);
-        queryWrapper.ne(ObjectUtils.isNotEmpty(notReviewStatus), "notReviewStatus", notReviewStatus);
+        queryWrapper.ne(ObjectUtils.isNotEmpty(notReviewStatus), "reviewStatus", notReviewStatus);
         queryWrapper.orderBy(SqlUtils.validSortField(sortField), sortOrder.equals(CommonConstant.SORT_ORDER_ASC),
                 sortField);
         return queryWrapper;

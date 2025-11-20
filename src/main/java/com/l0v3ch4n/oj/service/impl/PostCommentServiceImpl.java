@@ -88,6 +88,7 @@ public class PostCommentServiceImpl extends ServiceImpl<PostCommentMapper, PostC
         String sortOrder = postCommentQueryRequest.getSortOrder();
         Long id = postCommentQueryRequest.getPostCommentId();
         String content = postCommentQueryRequest.getContent();
+        Long postId = postCommentQueryRequest.getPostId();
         Long userId = postCommentQueryRequest.getUserId();
         Long notId = postCommentQueryRequest.getNotPostCommentId();
         Integer reviewStatus = postCommentQueryRequest.getReviewStatus();
@@ -99,9 +100,10 @@ public class PostCommentServiceImpl extends ServiceImpl<PostCommentMapper, PostC
         queryWrapper.like(StringUtils.isNotBlank(content), "content", content);
         queryWrapper.ne(ObjectUtils.isNotEmpty(notId), "id", notId);
         queryWrapper.eq(ObjectUtils.isNotEmpty(id), "id", id);
+        queryWrapper.eq(ObjectUtils.isNotEmpty(postId), "postId", postId);
         queryWrapper.eq(ObjectUtils.isNotEmpty(userId), "userId", userId);
         queryWrapper.eq(ObjectUtils.isNotEmpty(reviewStatus), "reviewStatus", reviewStatus);
-        queryWrapper.ne(ObjectUtils.isNotEmpty(notReviewStatus), "notReviewStatus", notReviewStatus);
+        queryWrapper.ne(ObjectUtils.isNotEmpty(notReviewStatus), "reviewStatus", notReviewStatus);
         queryWrapper.orderBy(SqlUtils.validSortField(sortField), sortOrder.equals(CommonConstant.SORT_ORDER_ASC),
                 sortField);
         return queryWrapper;

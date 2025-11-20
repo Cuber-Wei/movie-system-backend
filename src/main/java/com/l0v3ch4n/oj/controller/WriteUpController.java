@@ -26,7 +26,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
-import java.util.Objects;
 
 /**
  * 题解接口
@@ -137,7 +136,7 @@ public class WriteUpController {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
         WriteUp writeUp = writeUpService.getById(id);
-        if (writeUp == null || !Objects.equals(writeUp.getReviewStatus(), AuditConstant.PASSED)) {
+        if (writeUp == null) {
             throw new BusinessException(ErrorCode.NOT_FOUND_ERROR);
         }
         return ResultUtils.success(writeUpService.getWriteUpVO(writeUp, request));

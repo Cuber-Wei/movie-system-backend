@@ -23,7 +23,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
-import java.util.Objects;
 
 /**
  * 题解接口
@@ -102,7 +101,7 @@ public class PostCommentController {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
         PostComment postComment = postCommentService.getById(id);
-        if (postComment == null || !Objects.equals(postComment.getReviewStatus(), AuditConstant.PASSED)) {
+        if (postComment == null) {
             throw new BusinessException(ErrorCode.NOT_FOUND_ERROR);
         }
         return ResultUtils.success(postCommentService.getPostCommentVO(postComment, request));
