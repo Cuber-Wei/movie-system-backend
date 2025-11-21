@@ -5,12 +5,16 @@ import lombok.Data;
 import java.io.Serializable;
 
 /**
- * 创建请求
+ * 编辑请求
  */
 @Data
-public class MovieListAddRequest implements Serializable {
+public class MovieListEditRequest implements Serializable {
 
     private static final long serialVersionUID = 1L;
+    /**
+     * id
+     */
+    private Long movieListId;
     /**
      * 标题
      */

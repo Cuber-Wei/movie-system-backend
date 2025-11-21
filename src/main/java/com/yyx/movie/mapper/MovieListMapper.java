@@ -2,6 +2,7 @@ package com.yyx.movie.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.yyx.movie.model.entity.MovieList;
+import org.apache.ibatis.annotations.Param;
 
 /**
  * @author weichenghao
@@ -10,7 +11,7 @@ import com.yyx.movie.model.entity.MovieList;
  * @Entity com.yyx.movie.model.entity.MovieList
  */
 public interface MovieListMapper extends BaseMapper<MovieList> {
-
+    Long getMovieNumById(@Param("movieListId") Long movieListId);
 }
 
 
