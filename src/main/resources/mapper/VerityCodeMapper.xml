@@ -5,12 +5,12 @@
 <mapper namespace="com.l0v3ch4n.oj.mapper.VerityCodeMapper">
 
     <resultMap id="BaseResultMap" type="com.l0v3ch4n.oj.model.entity.VerityCode">
-            <id property="codeId" column="codeId" jdbcType="BIGINT"/>
-            <result property="userId" column="userId" jdbcType="VARCHAR"/>
-            <result property="code" column="code" jdbcType="VARCHAR"/>
-            <result property="createTime" column="createTime" jdbcType="TIMESTAMP"/>
-            <result property="updateTime" column="updateTime" jdbcType="TIMESTAMP"/>
-            <result property="isDelete" column="isDelete" jdbcType="TINYINT"/>
+        <id property="codeId" column="codeId" jdbcType="BIGINT"/>
+        <result property="userId" column="userId" jdbcType="VARCHAR"/>
+        <result property="code" column="code" jdbcType="VARCHAR"/>
+        <result property="createTime" column="createTime" jdbcType="TIMESTAMP"/>
+        <result property="updateTime" column="updateTime" jdbcType="TIMESTAMP"/>
+        <result property="isDelete" column="isDelete" jdbcType="TINYINT"/>
     </resultMap>
 
     <sql id="Base_Column_List">

@@ -5,11 +5,11 @@
 <mapper namespace="com.l0v3ch4n.oj.mapper.PostFavourMapper">
 
     <resultMap id="BaseResultMap" type="com.l0v3ch4n.oj.model.entity.PostFavour">
-            <id property="id" column="id" jdbcType="BIGINT"/>
-            <result property="postId" column="postId" jdbcType="BIGINT"/>
-            <result property="userId" column="userId" jdbcType="BIGINT"/>
-            <result property="createTime" column="createTime" jdbcType="TIMESTAMP"/>
-            <result property="updateTime" column="updateTime" jdbcType="TIMESTAMP"/>
+        <id property="id" column="id" jdbcType="BIGINT"/>
+        <result property="postId" column="postId" jdbcType="BIGINT"/>
+        <result property="userId" column="userId" jdbcType="BIGINT"/>
+        <result property="createTime" column="createTime" jdbcType="TIMESTAMP"/>
+        <result property="updateTime" column="updateTime" jdbcType="TIMESTAMP"/>
     </resultMap>
 
     <sql id="Base_Column_List">

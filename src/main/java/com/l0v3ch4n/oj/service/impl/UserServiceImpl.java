@@ -141,7 +141,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
                 user.setUserAccount("微信用户" + DigestUtils.md5DigestAsHex((SALT + mpOpenId).getBytes()));
                 user.setUserName("微信用户" + DigestUtils.md5DigestAsHex((SALT + mpOpenId).getBytes()));
                 user.setUserPassword("1234567890");
-                user.setUnionId(mpOpenId);
+                user.setMpOpenId(mpOpenId);
                 boolean saveResult = this.save(user);
                 if (!saveResult) {
                     throw new BusinessException(ErrorCode.SYSTEM_ERROR, "注册失败，数据库错误");

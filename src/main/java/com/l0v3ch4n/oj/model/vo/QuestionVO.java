@@ -45,6 +45,14 @@ public class QuestionVO implements Serializable {
      */
     private JudgeConfig judgeConfig;
     /**
+     * 提交数
+     */
+    private Long commitNum;
+    /**
+     * 通过数
+     */
+    private Long acceptedNum;
+    /**
      * 创建时间
      */
     private Date createTime;

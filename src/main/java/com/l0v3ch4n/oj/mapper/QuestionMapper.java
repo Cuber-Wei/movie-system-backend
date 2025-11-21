@@ -2,6 +2,7 @@ package com.l0v3ch4n.oj.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.l0v3ch4n.oj.model.entity.Question;
+import org.apache.ibatis.annotations.Param;
 
 /**
  * @author Lovechan
@@ -10,6 +11,10 @@ import com.l0v3ch4n.oj.model.entity.Question;
  * @Entity com.l0v3ch4n.oj.model.entity.Question
  */
 public interface QuestionMapper extends BaseMapper<Question> {
+
+    Long getCommitNumById(@Param("questionId") Long questionId);
+
+    Long getAcceptedNumById(@Param("questionId") Long questionId);
 
 }
 

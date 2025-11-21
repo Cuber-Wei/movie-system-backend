@@ -5,15 +5,15 @@
 <mapper namespace="com.l0v3ch4n.oj.mapper.PostMapper">
 
     <resultMap id="BaseResultMap" type="com.l0v3ch4n.oj.model.entity.Post">
-            <id property="postId" column="postId" jdbcType="BIGINT"/>
-            <result property="userId" column="userId" jdbcType="BIGINT"/>
-            <result property="title" column="title" jdbcType="VARCHAR"/>
-            <result property="content" column="content" jdbcType="VARCHAR"/>
-            <result property="tag" column="tag" jdbcType="VARCHAR"/>
-            <result property="reviewStatus" column="reviewStatus" jdbcType="INTEGER"/>
-            <result property="createTime" column="createTime" jdbcType="TIMESTAMP"/>
-            <result property="updateTime" column="updateTime" jdbcType="TIMESTAMP"/>
-            <result property="isDelete" column="isDelete" jdbcType="TINYINT"/>
+        <id property="postId" column="postId" jdbcType="BIGINT"/>
+        <result property="userId" column="userId" jdbcType="BIGINT"/>
+        <result property="title" column="title" jdbcType="VARCHAR"/>
+        <result property="content" column="content" jdbcType="VARCHAR"/>
+        <result property="tag" column="tag" jdbcType="VARCHAR"/>
+        <result property="reviewStatus" column="reviewStatus" jdbcType="INTEGER"/>
+        <result property="createTime" column="createTime" jdbcType="TIMESTAMP"/>
+        <result property="updateTime" column="updateTime" jdbcType="TIMESTAMP"/>
+        <result property="isDelete" column="isDelete" jdbcType="TINYINT"/>
     </resultMap>
 
     <sql id="Base_Column_List">
@@ -21,4 +21,11 @@
         content,tag,reviewStatus,
         createTime,updateTime,isDelete
     </sql>
+    <select id="listPostWithDelete" resultType="com.l0v3ch4n.oj.model.entity.Post"></select>
+    <select id="getPostCommentNumById" resultType="long">
+        select count(*)
+        from oj_db.post_comment
+        where postId = #{postId}
+          and reviewStatus = 1
+    </select>
 </mapper>

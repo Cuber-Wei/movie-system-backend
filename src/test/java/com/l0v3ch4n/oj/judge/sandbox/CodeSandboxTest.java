@@ -18,6 +18,23 @@ class CodeSandboxTest {
     @Value("${codesandbox.type:example}")
     private String type;
 
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        while (scanner.hasNext()) {
+            String type = scanner.next();
+            CodeSandbox codeSandbox = CodeSandboxFactory.newInstance(type);
+            String code = "int main() { }";
+            String language = QuestionSubmitLanguageEnum.JAVA.getValue();
+            List<String> inputList = Arrays.asList("1 2", "3 4");
+            ExecuteCodeRequest executeCodeRequest = ExecuteCodeRequest.builder()
+                    .code(code)
+                    .language(language)
+                    .inputList(inputList)
+                    .build();
+            ExecuteCodeResponse executeCodeResponse = codeSandbox.executeCode(executeCodeRequest);
+        }
+    }
+
     @Test
     void executeCode() {
         String type = "example";
@@ -33,7 +50,6 @@ class CodeSandboxTest {
         ExecuteCodeResponse executeCodeResponse = codeSandbox.executeCode(executeCodeRequest);
         Assertions.assertNotNull(executeCodeResponse);
     }
-
 
     @Test
     void executeCodeByValue() {
@@ -64,22 +80,5 @@ class CodeSandboxTest {
                 .build();
         ExecuteCodeResponse executeCodeResponse = codeSandbox.executeCode(executeCodeRequest);
         Assertions.assertNotNull(executeCodeResponse);
-    }
-
-    public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
-        while (scanner.hasNext()) {
-            String type = scanner.next();
-            CodeSandbox codeSandbox = CodeSandboxFactory.newInstance(type);
-            String code = "int main() { }";
-            String language = QuestionSubmitLanguageEnum.JAVA.getValue();
-            List<String> inputList = Arrays.asList("1 2", "3 4");
-            ExecuteCodeRequest executeCodeRequest = ExecuteCodeRequest.builder()
-                    .code(code)
-                    .language(language)
-                    .inputList(inputList)
-                    .build();
-            ExecuteCodeResponse executeCodeResponse = codeSandbox.executeCode(executeCodeRequest);
-        }
     }
 }

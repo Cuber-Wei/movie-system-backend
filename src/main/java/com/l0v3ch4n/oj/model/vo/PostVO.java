@@ -41,6 +41,10 @@ public class PostVO implements Serializable {
      */
     private Integer reviewStatus;
     /**
+     * 评论数
+     */
+    private Long commentNum;
+    /**
      * 创建时间
      */
     private Date createTime;

@@ -2,6 +2,7 @@ package com.l0v3ch4n.oj.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.l0v3ch4n.oj.model.entity.Post;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.Date;
 import java.util.List;
@@ -15,6 +16,8 @@ import java.util.List;
 public interface PostMapper extends BaseMapper<Post> {
 
     List<Post> listPostWithDelete(Date minUpdateTime);
+
+    Long getPostCommentNumById(@Param("postId") Long postId);
 }
 
 

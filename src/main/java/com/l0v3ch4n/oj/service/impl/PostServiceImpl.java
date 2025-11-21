@@ -227,6 +227,9 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements Po
         if (userId != null && userId > 0) {
             user = userService.getById(userId);
         }
+        // 获取评论数
+        Long commentNum = getBaseMapper().getPostCommentNumById(postId);
+        postVO.setCommentNum(commentNum);
         UserVO userVO = userService.getUserVO(user);
         postVO.setUser(userVO);
         return postVO;
@@ -252,6 +255,9 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements Po
                 user = userIdUserListMap.get(userId).get(0);
             }
             postVO.setUser(userService.getUserVO(user));
+            // 获取评论数
+            Long commentNum = getBaseMapper().getPostCommentNumById(postVO.getPostId());
+            postVO.setCommentNum(commentNum);
             return postVO;
         }).collect(Collectors.toList());
         postVOPage.setRecords(postVOList);

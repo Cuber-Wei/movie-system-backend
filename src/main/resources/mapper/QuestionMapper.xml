@@ -5,17 +5,17 @@
 <mapper namespace="com.l0v3ch4n.oj.mapper.QuestionMapper">
 
     <resultMap id="BaseResultMap" type="com.l0v3ch4n.oj.model.entity.Question">
-            <id property="questionId" column="questionId" jdbcType="BIGINT"/>
-            <result property="userId" column="userId" jdbcType="BIGINT"/>
-            <result property="title" column="title" jdbcType="VARCHAR"/>
-            <result property="content" column="content" jdbcType="VARCHAR"/>
-            <result property="tag" column="tag" jdbcType="VARCHAR"/>
-            <result property="answer" column="answer" jdbcType="VARCHAR"/>
-            <result property="judgeCase" column="judgeCase" jdbcType="VARCHAR"/>
-            <result property="judgeConfig" column="judgeConfig" jdbcType="VARCHAR"/>
-            <result property="createTime" column="createTime" jdbcType="TIMESTAMP"/>
-            <result property="updateTime" column="updateTime" jdbcType="TIMESTAMP"/>
-            <result property="isDelete" column="isDelete" jdbcType="TINYINT"/>
+        <id property="questionId" column="questionId" jdbcType="BIGINT"/>
+        <result property="userId" column="userId" jdbcType="BIGINT"/>
+        <result property="title" column="title" jdbcType="VARCHAR"/>
+        <result property="content" column="content" jdbcType="VARCHAR"/>
+        <result property="tag" column="tag" jdbcType="VARCHAR"/>
+        <result property="answer" column="answer" jdbcType="VARCHAR"/>
+        <result property="judgeCase" column="judgeCase" jdbcType="VARCHAR"/>
+        <result property="judgeConfig" column="judgeConfig" jdbcType="VARCHAR"/>
+        <result property="createTime" column="createTime" jdbcType="TIMESTAMP"/>
+        <result property="updateTime" column="updateTime" jdbcType="TIMESTAMP"/>
+        <result property="isDelete" column="isDelete" jdbcType="TINYINT"/>
     </resultMap>
 
     <sql id="Base_Column_List">
@@ -24,4 +24,15 @@
         judgeCase,judgeConfig,createTime,
         updateTime,isDelete
     </sql>
+    <select id="getCommitNumById" resultType="long">
+        select count(*)
+        from oj_db.question_submit
+        where questionId = #{questionId}
+    </select>
+    <select id="getAcceptedNumById" resultType="long">
+        select count(*)
+        from oj_db.question_submit
+        where questionId = #{questionId}
+          and status = 2
+    </select>
 </mapper>

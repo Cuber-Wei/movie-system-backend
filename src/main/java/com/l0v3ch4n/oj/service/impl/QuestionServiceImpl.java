@@ -127,6 +127,12 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question>
         if (userId != null && userId > 0) {
             user = userService.getById(userId);
         }
+        // 获取提交数和通过数
+        Long questionId = questionVO.getQuestionId();
+        Long commitNum = getBaseMapper().getCommitNumById(questionId);
+        Long acceptedNum = getBaseMapper().getAcceptedNumById(questionId);
+        questionVO.setAcceptedNum(acceptedNum);
+        questionVO.setCommitNum(commitNum);
         UserVO userVO = userService.getUserVO(user);
         questionVO.setUserVO(userVO);
         return questionVO;
@@ -152,6 +158,12 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question>
                 user = userIdUserListMap.get(userId).get(0);
             }
             questionVO.setUserVO(userService.getUserVO(user));
+            // 获取提交数和通过数
+            Long questionId = questionVO.getQuestionId();
+            Long commitNum = getBaseMapper().getCommitNumById(questionId);
+            Long acceptedNum = getBaseMapper().getAcceptedNumById(questionId);
+            questionVO.setAcceptedNum(acceptedNum);
+            questionVO.setCommitNum(commitNum);
             return questionVO;
         }).collect(Collectors.toList());
         questionVOPage.setRecords(questionVOList);

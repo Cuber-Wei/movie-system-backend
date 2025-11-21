@@ -5,14 +5,14 @@
 <mapper namespace="com.l0v3ch4n.oj.mapper.PostCommentMapper">
 
     <resultMap id="BaseResultMap" type="com.l0v3ch4n.oj.model.entity.PostComment">
-            <id property="postCommentId" column="postCommentId" jdbcType="BIGINT"/>
-            <result property="userId" column="userId" jdbcType="BIGINT"/>
-            <result property="postId" column="postId" jdbcType="BIGINT"/>
-            <result property="content" column="content" jdbcType="VARCHAR"/>
-            <result property="reviewStatus" column="reviewStatus" jdbcType="INTEGER"/>
-            <result property="createTime" column="createTime" jdbcType="TIMESTAMP"/>
-            <result property="updateTime" column="updateTime" jdbcType="TIMESTAMP"/>
-            <result property="isDelete" column="isDelete" jdbcType="TINYINT"/>
+        <id property="postCommentId" column="postCommentId" jdbcType="BIGINT"/>
+        <result property="userId" column="userId" jdbcType="BIGINT"/>
+        <result property="postId" column="postId" jdbcType="BIGINT"/>
+        <result property="content" column="content" jdbcType="VARCHAR"/>
+        <result property="reviewStatus" column="reviewStatus" jdbcType="INTEGER"/>
+        <result property="createTime" column="createTime" jdbcType="TIMESTAMP"/>
+        <result property="updateTime" column="updateTime" jdbcType="TIMESTAMP"/>
+        <result property="isDelete" column="isDelete" jdbcType="TINYINT"/>
     </resultMap>
 
     <sql id="Base_Column_List">
