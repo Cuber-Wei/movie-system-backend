@@ -9,10 +9,10 @@
         <version>2.7.2</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
-    <groupId>com.l0v3ch4n</groupId>
-    <artifactId>oj</artifactId>
+    <groupId>com.yyx</groupId>
+    <artifactId>movie</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>oj</name>
+    <name>movie</name>
     <properties>
         <java.version>1.8</java.version>
     </properties>
@@ -141,7 +141,7 @@
                             <artifactId>lombok</artifactId>
                         </exclude>
                     </excludes>
-                    <mainClass>com.l0v3ch4n.oj.MainApplication</mainClass>
+                    <mainClass>com.yyx.movie.MainApplication</mainClass>
                 </configuration>
             </plugin>
         </plugins>

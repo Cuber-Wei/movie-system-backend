@@ -1,9 +1,9 @@
 # 数据库初始化
 -- 创建库
-create database if not exists oj_db;
+create database if not exists movie_db;
 
 -- 切换库
-use oj_db;
+use movie_db;
 
 -- 用户表
 create table if not exists user
@@ -11,112 +11,87 @@ create table if not exists user
     userId       bigint auto_increment comment 'id' primary key,
     userAccount  varchar(256)                           not null comment '账号',
     userPassword varchar(512)                           not null comment '密码',
-    unionId      varchar(256)                           null comment '微信开放平台id',
-    mpOpenId     varchar(256)                           null comment '公众号openId',
-    userName     varchar(256)                           null comment '用户昵称',
-    userAvatar   varchar(1024)                          null comment '用户头像',
-    userProfile  varchar(512)                           null comment '用户简介',
+    userGender   varchar(4)   default '未知'            null comment '用户性别',
     userPhone    varchar(256)                           null comment '用户手机',
     userMail     varchar(256)                           null comment '用户邮箱',
     userRole     varchar(256) default 'user'            not null comment '用户角色：user/admin/ban',
+    birthday     datetime                               not null comment '用户生日',
     createTime   datetime     default CURRENT_TIMESTAMP not null comment '创建时间',
     updateTime   datetime     default CURRENT_TIMESTAMP not null on update CURRENT_TIMESTAMP comment '更新时间',
-    isDelete     tinyint      default 0                 not null comment '是否删除',
-    index idx_unionId (unionId)
+    isDelete     tinyint      default 0                 not null comment '是否删除'
 ) comment '用户' collate = utf8mb4_unicode_ci;
 
--- 题目表
-create table if not exists question
+-- 电影榜单表
+create table if not exists movie_list
 (
-    questionId  bigint auto_increment comment 'id' primary key,
-    userId      bigint                             not null comment '创建用户 id',
-    title       varchar(512)                       null comment '标题',
-    content     text                               null comment '内容',
-    tag         varchar(1024)                      null comment '标签列表（json 数组）',
-    answer      text                               null comment '参考答案',
-    judgeCase   varchar(1024)                      null comment '判题用例（json 数组）',
-    judgeConfig varchar(1024)                      null comment '判题配置（json 对象）',
-    createTime  datetime default CURRENT_TIMESTAMP not null comment '创建时间',
-    updateTime  datetime default CURRENT_TIMESTAMP not null on update CURRENT_TIMESTAMP comment '更新时间',
-    isDelete    tinyint  default 0                 not null comment '是否删除',
-    index idx_userId (userId)
-) comment '题目' collate = utf8mb4_unicode_ci;
-
--- 题目提交表
-create table if not exists question_submit
-(
-    questionSubmitId bigint auto_increment comment 'id' primary key,
+    movieListId      bigint auto_increment comment 'id' primary key,
     userId           bigint                             not null comment '创建用户 id',
-    questionId       bigint                             not null comment '题目 id',
-    language         varchar(128)                       not null comment '编程语言',
-    code             text                               not null comment '用户代码',
-    judgeInfo        varchar(1024)                      null comment '判题信息（json 对象）',
-    status           int      default 0                 not null comment '判题状态（0 - 待判题、1 - 判题中、2 - 成功、3 - 失败）',
+    title            varchar(512)                       null comment '标题',
+    listIntroduction text                               null comment '简介',
     createTime       datetime default CURRENT_TIMESTAMP not null comment '创建时间',
     updateTime       datetime default CURRENT_TIMESTAMP not null on update CURRENT_TIMESTAMP comment '更新时间',
     isDelete         tinyint  default 0                 not null comment '是否删除',
-    index idx_questionId (questionId),
     index idx_userId (userId)
-) comment '题目提交';
+) comment '电影榜单' collate = utf8mb4_unicode_ci;
 
--- 题解表
-create table if not exists write_up
+-- 电影榜单归属表
+create table if not exists movie_in_list
 (
-    writeUpId    bigint auto_increment comment 'id' primary key,
-    userId       bigint                             not null comment '创建用户 id',
-    questionId   bigint                             not null comment '题目 id',
-    title        varchar(512)                       null comment '标题',
-    content      text                               null comment '内容',
-    tag          varchar(1024)                      null comment '标签列表（json 数组）',
-    reviewStatus int      default 0                 not null comment '审核状态（0 - 待审核、1 - 审核通过、2 - 审核未通过）',
-    createTime   datetime default CURRENT_TIMESTAMP not null comment '创建时间',
-    updateTime   datetime default CURRENT_TIMESTAMP not null on update CURRENT_TIMESTAMP comment '更新时间',
-    isDelete     tinyint  default 0                 not null comment '是否删除',
-    index idx_questionId (questionId),
-    index idx_userId (userId)
-) comment '题解' collate = utf8mb4_unicode_ci;
-
--- 帖子表
-create table if not exists post
-(
-    postId       bigint auto_increment comment 'id' primary key,
-    userId       bigint                             not null comment '创建用户 id',
-    title        varchar(512)                       null comment '标题',
-    content      text                               null comment '内容',
-    tag          varchar(1024)                      null comment '标签列表（json 数组）',
-    reviewStatus int      default 0                 not null comment '审核状态（0 - 待审核、1 - 审核通过、2 - 审核未通过）',
-    createTime   datetime default CURRENT_TIMESTAMP not null comment '创建时间',
-    updateTime   datetime default CURRENT_TIMESTAMP not null on update CURRENT_TIMESTAMP comment '更新时间',
-    isDelete     tinyint  default 0                 not null comment '是否删除',
-    index idx_userId (userId)
-) comment '帖子' collate = utf8mb4_unicode_ci;
-
--- 帖子评论表
-create table if not exists post_comment
-(
-    postCommentId bigint auto_increment comment 'id' primary key,
-    userId        bigint                             not null comment '创建用户 id',
-    postId        bigint                             not null comment '帖子 id',
-    content       text                               not null comment '评论内容',
-    reviewStatus  int      default 0                 not null comment '审核状态（0 - 待审核、1 - 审核通过、2 - 审核未通过）',
+    movieInListId bigint auto_increment comment 'id' primary key,
+    movieListId   bigint                             not null comment '电影榜单 id',
+    movieId       bigint                             not null comment '电影 id',
     createTime    datetime default CURRENT_TIMESTAMP not null comment '创建时间',
     updateTime    datetime default CURRENT_TIMESTAMP not null on update CURRENT_TIMESTAMP comment '更新时间',
     isDelete      tinyint  default 0                 not null comment '是否删除',
-    index idx_postId (postId),
-    index idx_userId (userId)
-) comment '帖子评论' collate = utf8mb4_unicode_ci;
+    index idx_movieListId (movieListId),
+    index idx_movieId (movieId)
+) comment '题目提交';
 
--- 验证码表
-create table if not exists verity_code
+-- 电影收藏表
+create table if not exists collect
 (
-    codeId     bigint auto_increment comment 'id' primary key,
-    userId     varchar(256)                       not null comment '验证码对应用户 UnionId',
-    code       text                               not null comment '验证码内容',
+    collectId  bigint auto_increment comment 'id' primary key,
+    userId     bigint                             not null comment '创建用户 id',
+    movieId    bigint                             not null comment '题目 id',
     createTime datetime default CURRENT_TIMESTAMP not null comment '创建时间',
     updateTime datetime default CURRENT_TIMESTAMP not null on update CURRENT_TIMESTAMP comment '更新时间',
     isDelete   tinyint  default 0                 not null comment '是否删除',
+    index idx_movieId (movieId),
     index idx_userId (userId)
-) comment '验证码' collate = utf8mb4_unicode_ci;
+) comment '电影收藏' collate = utf8mb4_unicode_ci;
 
-INSERT INTO `user` (`userId`, `userAccount`, `userPassword`, `unionId`, `mpOpenId`, `userName`, `userAvatar`, `userProfile`, `userPhone`, `userMail`, `userRole`, `createTime`, `updateTime`, `isDelete`) VALUES
-    (1855858177690660865, 'admin', '2dea76c10c63f5fd1d236e6a5578a68e', NULL, NULL, '管理员', NULL, '这里是管理员', '18257550746', 'cuberwei0@163.com', 'admin', '2024-11-11 14:20:44', '2024-11-12 11:13:15', 0);
+-- 电影表
+create table if not exists movie
+(
+    movieId      bigint auto_increment comment 'id' primary key,
+    title        varchar(512)                       null comment '电影名称',
+    introduction text                               null comment '电影介绍',
+    actors       text                               null comment '演员信息',
+    duration     int      default 0                 not null comment '时长',
+    tag          varchar(1024)                      null comment '标签列表（json 数组）',
+    publishDate  datetime default '1970-1-1'        not null comment '出版日期',
+    createTime   datetime default CURRENT_TIMESTAMP not null comment '创建时间',
+    updateTime   datetime default CURRENT_TIMESTAMP not null on update CURRENT_TIMESTAMP comment '更新时间',
+    isDelete     tinyint  default 0                 not null comment '是否删除'
+) comment '电影' collate = utf8mb4_unicode_ci;
+
+-- 电影评论表
+create table if not exists movie_comment
+(
+    movieCommentId bigint auto_increment comment 'id' primary key,
+    userId         bigint                             not null comment '创建用户 id',
+    movieId        bigint                             not null comment '电影 id',
+    content        text                               not null comment '评论内容',
+    reviewStatus   int      default 0                 not null comment '审核状态（0 - 待审核、1 - 审核通过、2 - 审核未通过）',
+    createTime     datetime default CURRENT_TIMESTAMP not null comment '创建时间',
+    updateTime     datetime default CURRENT_TIMESTAMP not null on update CURRENT_TIMESTAMP comment '更新时间',
+    isDelete       tinyint  default 0                 not null comment '是否删除',
+    index idx_movieId (movieId),
+    index idx_userId (userId)
+) comment '电影评论' collate = utf8mb4_unicode_ci;
+
+INSERT INTO `user` (`userId`, `userAccount`, `userPassword`, `userRole`, `userPhone`, `userMail`,
+                    `createTime`, `updateTime`, `isDelete`, `userGender`, `birthday`)
+VALUES (1855858177690660865, 'admin', '2dea76c10c63f5fd1d236e6a5578a68e', 'admin',
+        '18255555555', 'cuberwei0@163.com', '2024-11-11 14:20:44', '2024-11-12 11:13:15', 0, '未知',
+        '2004-11-11 00:00:0');

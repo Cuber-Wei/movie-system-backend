@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yyx.movie.mapper.CollectMapper">
+
+    <resultMap id="BaseResultMap" type="com.yyx.movie.model.entity.Collect">
+            <id property="collectId" column="collectId" jdbcType="BIGINT"/>
+            <result property="userId" column="userId" jdbcType="BIGINT"/>
+            <result property="movieId" column="movieId" jdbcType="BIGINT"/>
+            <result property="createTime" column="createTime" jdbcType="TIMESTAMP"/>
+            <result property="updateTime" column="updateTime" jdbcType="TIMESTAMP"/>
+            <result property="isDelete" column="isDelete" jdbcType="TINYINT"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        collectId,userId,movieId,createTime,updateTime,isDelete
+    </sql>
+    <select id="listFavourPostByPage" resultType="com.yyx.movie.model.entity.Movie"></select>
+</mapper>

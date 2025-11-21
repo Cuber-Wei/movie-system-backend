@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yyx.movie.mapper.MovieMapper">
+
+    <resultMap id="BaseResultMap" type="com.yyx.movie.model.entity.Movie">
+            <id property="movieId" column="movieId" jdbcType="BIGINT"/>
+            <result property="title" column="title" jdbcType="VARCHAR"/>
+            <result property="introduction" column="introduction" jdbcType="VARCHAR"/>
+            <result property="actors" column="actors" jdbcType="VARCHAR"/>
+            <result property="duration" column="duration" jdbcType="INTEGER"/>
+            <result property="tag" column="tag" jdbcType="VARCHAR"/>
+            <result property="publishDate" column="publishDate" jdbcType="TIMESTAMP"/>
+            <result property="createTime" column="createTime" jdbcType="TIMESTAMP"/>
+            <result property="updateTime" column="updateTime" jdbcType="TIMESTAMP"/>
+            <result property="isDelete" column="isDelete" jdbcType="TINYINT"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        movieId,title,introduction,actors,duration,tag,
+        publishDate,createTime,updateTime,isDelete
+    </sql>
+    <select id="getMovieCommentNumById" resultType="long">
+        select count(*)
+        from movie_db.movie_comment
+        where movieId = #{movieId}
+          and reviewStatus = 1
+    </select>
+</mapper>

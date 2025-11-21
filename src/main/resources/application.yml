@@ -1,7 +1,7 @@
 # 公共配置文件
 spring:
   application:
-    name: oj
+    name: movie
   # 默认 dev 环境
   profiles:
     active: dev
@@ -19,9 +19,9 @@ spring:
   # todo 需替换配置
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/oj_db
-    username:
-    password:
+    url: jdbc:mysql://localhost:3306/movie_db
+    username: root
+    password: xxxx
   # Redis 配置
   # todo 需替换配置，然后取消注释
 #  redis:
@@ -41,34 +41,11 @@ spring:
     multipart:
       # 大小限制
       max-file-size: 10MB
-  # 验证邮件
-  mail:
-    host: smtp.qq.com
-    # 端口号
-    port: 587
-    # 发送邮件的邮箱地址
-    username:
-    # QQ邮箱获得的授权码
-    password:
-    # 邮箱编码
-    default-encoding: UTF-8
-    # 配置SSL 加密工厂
-    properties: # 设置邮件超时时间防止服务器阻塞
-      timeout: 5000
-      connection-timeout: 5000
-      write-timeout: 5000
-      mail:
-        smtp:
-          starttls:
-            enable: true
-          socketFactoryClass: javax.net.ssl.SSLSocketFactory
-        #表示开启 DEBUG 模式，这样，邮件发送过程的日志会在控制台打印出来，方便排查错误
-        debug: true
 server:
   address: 0.0.0.0
   port: 8101
   servlet:
-    context-path: /oj/api
+    context-path: /api
     # cookie 30 天过期
     session:
       cookie:
@@ -107,10 +84,10 @@ wx:
 # todo 需替换配置
 cos:
   client:
-    accessKey: xxx
-    secretKey: xxx
-    region: xxx
-    bucket: xxx
+    accessKey: xxxx
+    secretKey: xxxx
+    region: xxxx
+    bucket: xxxx
 # 接口文档配置
 knife4j:
   enable: true
@@ -121,7 +98,4 @@ knife4j:
       default:
         api-rule: package
         api-rule-resources:
-          - com.l0v3ch4n.oj.controller
-# 代码沙箱配置
-codesandbox:
-  type: remote
+          - com.yyx.movie.controller
