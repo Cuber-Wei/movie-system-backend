@@ -82,6 +82,7 @@ create table if not exists movie_comment
     userId         bigint                             not null comment '创建用户 id',
     movieId        bigint                             not null comment '电影 id',
     content        text                               not null comment '评论内容',
+    score          float    default 0.0               not null comment '评分',
     reviewStatus   int      default 0                 not null comment '审核状态（0 - 待审核、1 - 审核通过、2 - 审核未通过）',
     createTime     datetime default CURRENT_TIMESTAMP not null comment '创建时间',
     updateTime     datetime default CURRENT_TIMESTAMP not null on update CURRENT_TIMESTAMP comment '更新时间',

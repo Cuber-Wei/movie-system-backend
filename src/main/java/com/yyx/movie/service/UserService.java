@@ -115,5 +115,5 @@ public interface UserService extends IService<User> {
      * @param userAccount 用户名
      * @return 用户id
      */
-    long getUserIdByAccount(String userAccount, String userMail);
+    long getUserIdByAccount(String userAccount);
 }

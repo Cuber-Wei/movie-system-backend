@@ -236,7 +236,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     }
 
     @Override
-    public long getUserIdByAccount(String userAccount, String userMail) {
+    public long getUserIdByAccount(String userAccount) {
         if (StringUtils.isBlank(userAccount)) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR, "请求参数为空");
         }

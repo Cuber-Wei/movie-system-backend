@@ -20,6 +20,10 @@ public class MovieCommentAddRequest implements Serializable {
      */
     private String content;
     /**
+     * 评分
+     */
+    private Float score;
+    /**
      * 用户 id
      */
     private Long userId;

@@ -55,7 +55,7 @@ public class MovieController {
         if (movieAddRequest == null) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
-        // 仅管理员可删除
+        // 仅管理员可添加
         if (!userService.isAdmin(request)) {
             throw new BusinessException(ErrorCode.NO_AUTH_ERROR);
         }

@@ -5,16 +5,16 @@
 <mapper namespace="com.yyx.movie.mapper.MovieMapper">
 
     <resultMap id="BaseResultMap" type="com.yyx.movie.model.entity.Movie">
-            <id property="movieId" column="movieId" jdbcType="BIGINT"/>
-            <result property="title" column="title" jdbcType="VARCHAR"/>
-            <result property="introduction" column="introduction" jdbcType="VARCHAR"/>
-            <result property="actors" column="actors" jdbcType="VARCHAR"/>
-            <result property="duration" column="duration" jdbcType="INTEGER"/>
-            <result property="tag" column="tag" jdbcType="VARCHAR"/>
-            <result property="publishDate" column="publishDate" jdbcType="TIMESTAMP"/>
-            <result property="createTime" column="createTime" jdbcType="TIMESTAMP"/>
-            <result property="updateTime" column="updateTime" jdbcType="TIMESTAMP"/>
-            <result property="isDelete" column="isDelete" jdbcType="TINYINT"/>
+        <id property="movieId" column="movieId" jdbcType="BIGINT"/>
+        <result property="title" column="title" jdbcType="VARCHAR"/>
+        <result property="introduction" column="introduction" jdbcType="VARCHAR"/>
+        <result property="actors" column="actors" jdbcType="VARCHAR"/>
+        <result property="duration" column="duration" jdbcType="INTEGER"/>
+        <result property="tag" column="tag" jdbcType="VARCHAR"/>
+        <result property="publishDate" column="publishDate" jdbcType="TIMESTAMP"/>
+        <result property="createTime" column="createTime" jdbcType="TIMESTAMP"/>
+        <result property="updateTime" column="updateTime" jdbcType="TIMESTAMP"/>
+        <result property="isDelete" column="isDelete" jdbcType="TINYINT"/>
     </resultMap>
 
     <sql id="Base_Column_List">

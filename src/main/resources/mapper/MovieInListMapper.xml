@@ -5,12 +5,12 @@
 <mapper namespace="com.yyx.movie.mapper.MovieInListMapper">
 
     <resultMap id="BaseResultMap" type="com.yyx.movie.model.entity.MovieInList">
-            <id property="movieInListId" column="movieInListId" jdbcType="BIGINT"/>
-            <result property="movieListId" column="movieListId" jdbcType="BIGINT"/>
-            <result property="movieId" column="movieId" jdbcType="BIGINT"/>
-            <result property="createTime" column="createTime" jdbcType="TIMESTAMP"/>
-            <result property="updateTime" column="updateTime" jdbcType="TIMESTAMP"/>
-            <result property="isDelete" column="isDelete" jdbcType="TINYINT"/>
+        <id property="movieInListId" column="movieInListId" jdbcType="BIGINT"/>
+        <result property="movieListId" column="movieListId" jdbcType="BIGINT"/>
+        <result property="movieId" column="movieId" jdbcType="BIGINT"/>
+        <result property="createTime" column="createTime" jdbcType="TIMESTAMP"/>
+        <result property="updateTime" column="updateTime" jdbcType="TIMESTAMP"/>
+        <result property="isDelete" column="isDelete" jdbcType="TINYINT"/>
     </resultMap>
 
     <sql id="Base_Column_List">

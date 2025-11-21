@@ -80,31 +80,17 @@ public class CollectServiceImpl extends ServiceImpl<CollectMapper, Collect>
         // 已收藏
         if (oldCollect != null) {
             result = this.remove(movieFavourQueryWrapper);
-            if (result) {
-                // 帖子收藏数 - 1
-                result = movieService.update()
-                        .eq("id", movieId)
-                        .gt("favourNum", 0)
-                        .setSql("favourNum = favourNum - 1")
-                        .update();
-                return result ? -1 : 0;
-            } else {
+            if (!result) {
                 throw new BusinessException(ErrorCode.SYSTEM_ERROR);
             }
         } else {
             // 未帖子收藏
             result = this.save(movieFavour);
-            if (result) {
-                // 帖子收藏数 + 1
-                result = movieService.update()
-                        .eq("id", movieId)
-                        .setSql("favourNum = favourNum + 1")
-                        .update();
-                return result ? 1 : 0;
-            } else {
+            if (!result) {
                 throw new BusinessException(ErrorCode.SYSTEM_ERROR);
             }
         }
+        return 1;
     }
 
 }

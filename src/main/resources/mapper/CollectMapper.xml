@@ -5,16 +5,25 @@
 <mapper namespace="com.yyx.movie.mapper.CollectMapper">
 
     <resultMap id="BaseResultMap" type="com.yyx.movie.model.entity.Collect">
-            <id property="collectId" column="collectId" jdbcType="BIGINT"/>
-            <result property="userId" column="userId" jdbcType="BIGINT"/>
-            <result property="movieId" column="movieId" jdbcType="BIGINT"/>
-            <result property="createTime" column="createTime" jdbcType="TIMESTAMP"/>
-            <result property="updateTime" column="updateTime" jdbcType="TIMESTAMP"/>
-            <result property="isDelete" column="isDelete" jdbcType="TINYINT"/>
+        <id property="collectId" column="collectId" jdbcType="BIGINT"/>
+        <result property="userId" column="userId" jdbcType="BIGINT"/>
+        <result property="movieId" column="movieId" jdbcType="BIGINT"/>
+        <result property="createTime" column="createTime" jdbcType="TIMESTAMP"/>
+        <result property="updateTime" column="updateTime" jdbcType="TIMESTAMP"/>
+        <result property="isDelete" column="isDelete" jdbcType="TINYINT"/>
     </resultMap>
 
     <sql id="Base_Column_List">
         collectId,userId,movieId,createTime,updateTime,isDelete
     </sql>
-    <select id="listFavourPostByPage" resultType="com.yyx.movie.model.entity.Movie"></select>
+    <select id="listFavourMovieByPage" resultType="com.yyx.movie.model.entity.Movie">
+        select
+        <include refid="Base_Column_List"/>
+        from movie_db.movie
+        where movieId IN (
+        select movieId
+        from movie_db.collect
+        where userId = #{favourUserId}
+        )
+    </select>
 </mapper>

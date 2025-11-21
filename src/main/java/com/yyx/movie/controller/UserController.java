@@ -287,8 +287,7 @@ public class UserController {
         String userAccount = userForgetPasswordRequest.getUserAccount();
         String userPassword = userForgetPasswordRequest.getUserPassword();
         String checkPassword = userForgetPasswordRequest.getCheckPassword();
-        String userMail = userForgetPasswordRequest.getUserMail();
-        long userId = userService.getUserIdByAccount(userAccount, userMail);
+        long userId = userService.getUserIdByAccount(userAccount);
         if (userId == -1) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR, "用户不存在！");
         } else {
@@ -299,7 +298,6 @@ public class UserController {
             User user = new User();
             user.setUserId(userId);
             user.setUserPassword(encryptPassword);
-            user.setUserMail(userMail);
             boolean result = userService.updateById(user);
             ThrowUtils.throwIf(!result, ErrorCode.OPERATION_ERROR);
             return ResultUtils.success(true);

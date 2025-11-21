@@ -29,11 +29,15 @@ public class MovieCommentQueryRequest extends PageRequest implements Serializabl
     /**
      * 帖子id
      */
-    private Long postId;
+    private Long movieId;
     /**
      * 内容
      */
     private String content;
+    /**
+     * 评分
+     */
+    private Float score;
     /**
      * 审核状态
      */

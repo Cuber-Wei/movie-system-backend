@@ -87,9 +87,10 @@ public class MovieCommentServiceImpl extends ServiceImpl<MovieCommentMapper, Mov
         String sortOrder = movieCommentQueryRequest.getSortOrder();
         Long id = movieCommentQueryRequest.getMovieCommentId();
         String content = movieCommentQueryRequest.getContent();
-        Long postId = movieCommentQueryRequest.getPostId();
+        Long movieId = movieCommentQueryRequest.getMovieId();
         Long userId = movieCommentQueryRequest.getUserId();
         Long notId = movieCommentQueryRequest.getNotMovieCommentId();
+        Float score = movieCommentQueryRequest.getScore();
         Integer reviewStatus = movieCommentQueryRequest.getReviewStatus();
         Integer notReviewStatus = movieCommentQueryRequest.getNotReviewStatus();
         // 拼接查询条件
@@ -97,9 +98,10 @@ public class MovieCommentServiceImpl extends ServiceImpl<MovieCommentMapper, Mov
             queryWrapper.and(qw -> qw.like("title", searchText).or().like("content", searchText));
         }
         queryWrapper.like(StringUtils.isNotBlank(content), "content", content);
+        queryWrapper.eq(ObjectUtils.isNotEmpty(score), "score", score);
         queryWrapper.ne(ObjectUtils.isNotEmpty(notId), "id", notId);
         queryWrapper.eq(ObjectUtils.isNotEmpty(id), "id", id);
-        queryWrapper.eq(ObjectUtils.isNotEmpty(postId), "postId", postId);
+        queryWrapper.eq(ObjectUtils.isNotEmpty(movieId), "movieId", movieId);
         queryWrapper.eq(ObjectUtils.isNotEmpty(userId), "userId", userId);
         queryWrapper.eq(ObjectUtils.isNotEmpty(reviewStatus), "reviewStatus", reviewStatus);
         queryWrapper.ne(ObjectUtils.isNotEmpty(notReviewStatus), "reviewStatus", notReviewStatus);

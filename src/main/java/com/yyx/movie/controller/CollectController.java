@@ -28,7 +28,7 @@ import javax.servlet.http.HttpServletRequest;
  * 帖子收藏接口
  */
 @RestController
-@RequestMapping("/movie_favour")
+@RequestMapping("/collect")
 @Slf4j
 public class CollectController {
 

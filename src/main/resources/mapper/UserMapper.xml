@@ -5,17 +5,17 @@
 <mapper namespace="com.yyx.movie.mapper.UserMapper">
 
     <resultMap id="BaseResultMap" type="com.yyx.movie.model.entity.User">
-            <id property="userId" column="userId" jdbcType="BIGINT"/>
-            <result property="userAccount" column="userAccount" jdbcType="VARCHAR"/>
-            <result property="userPassword" column="userPassword" jdbcType="VARCHAR"/>
-            <result property="userGender" column="userGender" jdbcType="VARCHAR"/>
-            <result property="userPhone" column="userPhone" jdbcType="VARCHAR"/>
-            <result property="userMail" column="userMail" jdbcType="VARCHAR"/>
-            <result property="userRole" column="userRole" jdbcType="VARCHAR"/>
-            <result property="birthDay" column="birthday" jdbcType="TIMESTAMP"/>
-            <result property="createTime" column="createTime" jdbcType="TIMESTAMP"/>
-            <result property="updateTime" column="updateTime" jdbcType="TIMESTAMP"/>
-            <result property="isDelete" column="isDelete" jdbcType="TINYINT"/>
+        <id property="userId" column="userId" jdbcType="BIGINT"/>
+        <result property="userAccount" column="userAccount" jdbcType="VARCHAR"/>
+        <result property="userPassword" column="userPassword" jdbcType="VARCHAR"/>
+        <result property="userGender" column="userGender" jdbcType="VARCHAR"/>
+        <result property="userPhone" column="userPhone" jdbcType="VARCHAR"/>
+        <result property="userMail" column="userMail" jdbcType="VARCHAR"/>
+        <result property="userRole" column="userRole" jdbcType="VARCHAR"/>
+        <result property="birthDay" column="birthday" jdbcType="TIMESTAMP"/>
+        <result property="createTime" column="createTime" jdbcType="TIMESTAMP"/>
+        <result property="updateTime" column="updateTime" jdbcType="TIMESTAMP"/>
+        <result property="isDelete" column="isDelete" jdbcType="TINYINT"/>
     </resultMap>
 
     <sql id="Base_Column_List">
