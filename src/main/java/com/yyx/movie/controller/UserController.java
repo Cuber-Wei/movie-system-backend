@@ -57,7 +57,7 @@ public class UserController {
         String userPassword = userRegisterRequest.getUserPassword();
         String checkPassword = userRegisterRequest.getCheckPassword();
         String userPhone = userRegisterRequest.getUserPhone();
-        Date birthday = userRegisterRequest.getBirthday();
+        Date birthday = userRegisterRequest.getBirthDay();
         String userGender = userRegisterRequest.getUserGender();
         if (StringUtils.isAnyBlank(userAccount, userPassword, checkPassword, userPhone, userGender) && birthday != null) {
             return null;

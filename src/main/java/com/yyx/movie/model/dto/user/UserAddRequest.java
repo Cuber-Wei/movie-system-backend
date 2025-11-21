@@ -30,7 +30,7 @@ public class UserAddRequest implements Serializable {
     /**
      * 生日
      */
-    private String birthday;
+    private String birthDay;
     /**
      * 用户性别
      */

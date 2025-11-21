@@ -65,13 +65,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
             QueryWrapper<User> queryWrapper = new QueryWrapper<>();
             queryWrapper.eq("userAccount", userAccount);
             long count = this.baseMapper.selectCount(queryWrapper);
-            QueryWrapper<User> queryWrapperMail = new QueryWrapper<>();
-            long countMail = this.baseMapper.selectCount(queryWrapperMail);
             if (count > 0) {
                 throw new BusinessException(ErrorCode.PARAMS_ERROR, "账号重复");
-            }
-            if (countMail > 0) {
-                throw new BusinessException(ErrorCode.PARAMS_ERROR, "邮箱重复");
             }
             // 2. 加密
             String encryptPassword = DigestUtils.md5DigestAsHex((SALT + userPassword).getBytes());

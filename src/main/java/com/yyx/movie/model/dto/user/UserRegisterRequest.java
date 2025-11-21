@@ -36,7 +36,7 @@ public class UserRegisterRequest implements Serializable {
     /**
      * 用户生日
      */
-    private Date birthday;
+    private Date birthDay;
 
     /**
      * 用户性别

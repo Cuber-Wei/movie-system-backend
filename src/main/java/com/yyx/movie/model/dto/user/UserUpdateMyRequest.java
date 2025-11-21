@@ -3,6 +3,7 @@ package com.yyx.movie.model.dto.user;
 import lombok.Data;
 
 import java.io.Serializable;
+import java.util.Date;
 
 /**
  * 用户更新个人信息请求
@@ -27,6 +28,10 @@ public class UserUpdateMyRequest implements Serializable {
      * 用户手机号
      */
     private String userPhone;
+    /**
+     * 用户生日
+     */
+    private Date birthDay;
     /**
      * 用户邮箱
      */
