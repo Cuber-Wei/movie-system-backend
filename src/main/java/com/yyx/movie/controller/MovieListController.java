@@ -56,7 +56,7 @@ public class MovieListController {
      * @return
      */
     @PostMapping("/add")
-    public BaseResponse<Long> addMovieListList(@RequestBody MovieListAddRequest movieListAddRequest, HttpServletRequest request) {
+    public BaseResponse<Long> addMovieList(@RequestBody MovieListAddRequest movieListAddRequest, HttpServletRequest request) {
         if (movieListAddRequest == null) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }

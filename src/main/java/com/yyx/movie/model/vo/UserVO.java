@@ -35,10 +35,6 @@ public class UserVO implements Serializable {
      */
     private String userPhone;
     /**
-     * 用户邮箱
-     */
-    private String userMail;
-    /**
      * 用户角色：user/admin/ban
      */
     private String userRole;
@@ -62,9 +58,6 @@ public class UserVO implements Serializable {
         //手机号、邮箱脱敏(中间部分打*)
         String phone = user.getUserPhone();
         userVO.setUserPhone(phone.substring(0, 3) + "****" + phone.substring(phone.length() - 3));
-        String mail = user.getUserMail();
-        String[] parts = mail.split("@");
-        userVO.setUserMail(parts[0].substring(0, 3) + "****@" + parts[1]);
         return userVO;
     }
 }

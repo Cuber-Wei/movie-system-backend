@@ -13,7 +13,6 @@ create table if not exists user
     userPassword varchar(512)                           not null comment '密码',
     userGender   varchar(4)   default '未知'            null comment '用户性别',
     userPhone    varchar(256)                           null comment '用户手机',
-    userMail     varchar(256)                           null comment '用户邮箱',
     userRole     varchar(256) default 'user'            not null comment '用户角色：user/admin/ban',
     birthday     datetime                               not null comment '用户生日',
     createTime   datetime     default CURRENT_TIMESTAMP not null comment '创建时间',
@@ -91,8 +90,8 @@ create table if not exists movie_comment
     index idx_userId (userId)
 ) comment '电影评论' collate = utf8mb4_unicode_ci;
 
-INSERT INTO `user` (`userId`, `userAccount`, `userPassword`, `userRole`, `userPhone`, `userMail`,
+INSERT INTO `user` (`userId`, `userAccount`, `userPassword`, `userRole`, `userPhone`,
                     `createTime`, `updateTime`, `isDelete`, `userGender`, `birthday`)
 VALUES (1855858177690660865, 'admin', '2dea76c10c63f5fd1d236e6a5578a68e', 'admin',
-        '18255555555', 'cuberwei0@163.com', '2024-11-11 14:20:44', '2024-11-12 11:13:15', 0, '未知',
+        '18255555555', '2024-11-11 14:20:44', '2024-11-12 11:13:15', 0, '未知',
         '2004-11-11 00:00:0');

@@ -15,15 +15,11 @@ public class UserUpdateMyRequest implements Serializable {
     /**
      * 用户昵称
      */
-    private String userName;
+    private String userAccount;
     /**
      * 用户头像
      */
-    private String userAvatar;
-    /**
-     * 简介
-     */
-    private String userProfile;
+    private String userGender;
     /**
      * 用户手机号
      */
@@ -32,8 +28,4 @@ public class UserUpdateMyRequest implements Serializable {
      * 用户生日
      */
     private Date birthDay;
-    /**
-     * 用户邮箱
-     */
-    private String userMail;
 }

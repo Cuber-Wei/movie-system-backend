@@ -41,10 +41,6 @@ public class User implements Serializable {
      */
     private String userPhone;
     /**
-     * 用户邮箱
-     */
-    private String userMail;
-    /**
      * 用户角色：user/admin/ban
      */
     private String userRole;

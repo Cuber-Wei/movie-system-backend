@@ -20,9 +20,9 @@ public class UserUpdateRequest implements Serializable {
      */
     private String userAccount;
     /**
-     * 简介
+     * 性别
      */
-    private String userProfile;
+    private String userGender;
     /**
      * 用户角色：user/admin/ban
      */
@@ -31,10 +31,6 @@ public class UserUpdateRequest implements Serializable {
      * 用户手机号
      */
     private String userPhone;
-    /**
-     * 用户邮箱
-     */
-    private String userMail;
     /**
      * 用户生日
      */

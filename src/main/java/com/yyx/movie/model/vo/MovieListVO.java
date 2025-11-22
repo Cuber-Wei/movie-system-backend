@@ -48,10 +48,6 @@ public class MovieListVO implements Serializable {
      * 榜单中电影数量
      */
     private Long movieNum;
-    /**
-     * 榜单中的电影id列表
-     */
-    private List<MovieVO> movieList;
 
     /**
      * 包装类转对象

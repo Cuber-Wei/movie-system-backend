@@ -18,4 +18,9 @@
         movieListId,userId,title,listIntroduction,createTime,updateTime,
         isDelete
     </sql>
+    <select id="getMovieNumById" resultType="long">
+        select COUNT(*)
+        from movie_db.movie_in_list
+        where movieListId = #{movieListId}
+    </select>
 </mapper>

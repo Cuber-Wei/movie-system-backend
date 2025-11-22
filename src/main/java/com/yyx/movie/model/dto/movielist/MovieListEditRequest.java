@@ -22,7 +22,7 @@ public class MovieListEditRequest implements Serializable {
     /**
      * 简介
      */
-    private String introduction;
+    private String listIntroduction;
     /**
      * 创建用户 id
      */

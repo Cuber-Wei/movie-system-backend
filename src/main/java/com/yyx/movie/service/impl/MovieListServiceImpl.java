@@ -13,9 +13,12 @@ import com.yyx.movie.model.dto.movielist.MovieListEsDTO;
 import com.yyx.movie.model.dto.movielist.MovieListQueryRequest;
 import com.yyx.movie.model.entity.MovieInList;
 import com.yyx.movie.model.entity.MovieList;
+import com.yyx.movie.model.entity.User;
 import com.yyx.movie.model.vo.MovieListVO;
+import com.yyx.movie.model.vo.UserVO;
 import com.yyx.movie.service.MovieInListService;
 import com.yyx.movie.service.MovieListService;
+import com.yyx.movie.service.UserService;
 import com.yyx.movie.utils.SqlUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
@@ -47,6 +50,8 @@ public class MovieListServiceImpl extends ServiceImpl<MovieListMapper, MovieList
     private ElasticsearchRestTemplate elasticsearchRestTemplate;
     @Resource
     private MovieInListService movieInListService;
+    @Resource
+    private UserService userService;
 
     @Override
     public void validMovieList(MovieList movieList, boolean add) {
@@ -186,6 +191,14 @@ public class MovieListServiceImpl extends ServiceImpl<MovieListMapper, MovieList
     public MovieListVO getMovieListVO(MovieList movieList) {
         MovieListVO movieListVO = MovieListVO.objToVo(movieList);
         long movieListId = movieList.getMovieListId();
+        // 1. 关联查询用户信息
+        Long userId = movieList.getUserId();
+        User user = null;
+        if (userId != null && userId > 0) {
+            user = userService.getById(userId);
+        }
+        UserVO userVO = userService.getUserVO(user);
+        movieListVO.setUser(userVO);
         // 获取电影数
         Long movieNum = getBaseMapper().getMovieNumById(movieListId);
         movieListVO.setMovieNum(movieNum);
@@ -205,6 +218,14 @@ public class MovieListServiceImpl extends ServiceImpl<MovieListMapper, MovieList
             // 获取电影数
             Long commentNum = getBaseMapper().getMovieNumById(movieListVO.getMovieListId());
             movieListVO.setMovieNum(commentNum);
+            // 1. 关联查询用户信息
+            Long userId = movielist.getUserId();
+            User user = null;
+            if (userId != null && userId > 0) {
+                user = userService.getById(userId);
+            }
+            UserVO userVO = userService.getUserVO(user);
+            movieListVO.setUser(userVO);
             return movieListVO;
         }).collect(Collectors.toList());
         movieListVOPage.setRecords(movieListVOList);

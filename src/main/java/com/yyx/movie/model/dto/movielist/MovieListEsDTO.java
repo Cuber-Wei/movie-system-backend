@@ -34,9 +34,9 @@ public class MovieListEsDTO implements Serializable {
      */
     private String title;
     /**
-     * 内容
+     * 简介
      */
-    private String introduction;
+    private String listIntroduction;
     /**
      * 标签列表
      */

@@ -25,7 +25,7 @@ public class UserQueryRequest extends PageRequest implements Serializable {
     /**
      * 简介
      */
-    private String userProfile;
+    private String userGender;
     /**
      * 用户角色：user/admin/ban
      */
@@ -34,10 +34,6 @@ public class UserQueryRequest extends PageRequest implements Serializable {
      * 用户手机号
      */
     private String userPhone;
-    /**
-     * 用户邮箱
-     */
-    private String userMail;
     /**
      * 用户生日
      */
